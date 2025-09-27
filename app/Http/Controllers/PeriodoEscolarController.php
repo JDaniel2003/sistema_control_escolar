@@ -41,9 +41,9 @@ class PeriodoEscolarController extends Controller
         $mostrar = $request->get('mostrar', 10); // por defecto 10
 
     if ($mostrar === "todo") {
-        $periodos = $query->orderBy('fecha_inicio', 'asc')->get();
+        $periodos = $query->orderBy('id_periodo_escolar', 'desc')->get();
     } else {
-        $periodos = $query->orderBy('fecha_inicio', 'asc')->paginate((int)$mostrar);
+        $periodos = $query->orderBy('id_periodo_escolar', 'desc')->paginate((int)$mostrar);
     }
 
         // Para llenar el select de tipos
@@ -60,11 +60,23 @@ class PeriodoEscolarController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nombre' => 'required|string|max:255',
-            'fecha_inicio' => 'required|date',
-            'fecha_fin' => 'required|date|after_or_equal:fecha_inicio',
-            'estado' => 'required|in:Abierto,Cerrado',
-        ]);
+    'nombre' => [
+        'required',
+        'string',
+        'max:255',
+        'unique:periodos_escolares,nombre',
+        // 🔹 Obliga a tener al menos un guion en medio
+        'regex:/^[A-Za-z0-9]+-[A-Za-z0-9]+$/',
+    ],
+    'fecha_inicio' => 'required|date',
+    'fecha_fin' => 'required|date|after_or_equal:fecha_inicio',
+    'estado' => 'required|in:Abierto,Cerrado',
+], [
+    // 🔹 Mensajes personalizados
+    'nombre.unique' => 'El nombre del período ya existe.',
+    'nombre.regex'  => 'El nombre debe contener un guion en medio (ejemplo: 2025-1).',
+    'nombre.required' => 'El campo nombre es obligatorio.',
+]);
 
         PeriodoEscolar::create($request->all());
 

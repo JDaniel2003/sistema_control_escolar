@@ -18,9 +18,17 @@
             </div>
 
             <div class="form-group">
-                <label>ID Tipo Período</label>
-                <input type="number" name="id_tipo_periodo" class="form-control">
-            </div>
+                            <label>ID Tipo Período</label>
+                            <select name="id_tipo_periodo" class="form-control" required>
+                                <option value="">-- Tipo de período --</option>
+                                @foreach ($tipos as $tipo)
+                                    <option value="{{ $tipo->id }}"
+                                        {{ old('id_tipo_periodo') == $tipo->id ? 'selected' : '' }}>
+                                        {{ $tipo->nombre }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
 
             <div class="form-group">
                 <label>Fecha Inicio</label>
