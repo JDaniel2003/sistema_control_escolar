@@ -18,12 +18,12 @@
             </div>
 
             <div class="form-group">
-                            <label>ID Tipo Período</label>
+                            <label>Tipo Período</label>
                             <select name="id_tipo_periodo" class="form-control" required>
-                                <option value="">-- Tipo de período --</option>
+                                <option value="">Tipo de período</option>
                                 @foreach ($tipos as $tipo)
-                                    <option value="{{ $tipo->id }}"
-                                        {{ old('id_tipo_periodo') == $tipo->id ? 'selected' : '' }}>
+                                    <option value="{{ $tipo->id_tipo_periodo }}"
+                                        {{ old('id_tipo_periodo') == $tipo->id_tipo_periodo ? 'selected' : '' }}>
                                         {{ $tipo->nombre }}
                                     </option>
                                 @endforeach

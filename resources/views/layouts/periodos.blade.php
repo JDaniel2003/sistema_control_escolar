@@ -153,11 +153,11 @@
                                     </div>
 
                                     <div class="col-md-2">
-                                        <select name="id_tipo_periodo" class="form-control">
-                                            <option value="">-- Tipo de período --</option>
+                                        <select name="id_tipo_periodo" class="form-control" required>
+                                            <option value="">Tipo de período</option>
                                             @foreach ($tipos as $tipo)
-                                                <option value="{{ $tipo->id }}"
-                                                    {{ request('id_tipo_periodo') == $tipo->id ? 'selected' : '' }}>
+                                                <option value="{{ $tipo->id_tipo_periodo }}"
+                                                    {{ old('id_tipo_periodo') == $tipo->id_tipo_periodo ? 'selected' : '' }}>
                                                     {{ $tipo->nombre }}
                                                 </option>
                                             @endforeach
@@ -177,7 +177,7 @@
 
                                     <div class="col-md-2">
                                         <select name="estado" class="form-control">
-                                            <option value="">-- Estado --</option>
+                                            <option value="">Estado</option>
                                             <option value="Abierto"
                                                 {{ request('estado') == 'Abierto' ? 'selected' : '' }}>Abierto</option>
                                             <option value="Cerrado"
@@ -348,81 +348,74 @@
                     <div class="modal-body">
 
                         <div class="form-group">
-    <label>Nombre</label>
-    <input type="text" 
-           name="nombre"
-           value="{{ old('nombre') }}"
-           class="form-control @error('nombre') is-invalid @enderror" 
-           required>
-    @error('nombre')
-        <div class="invalid-feedback">
-            {{ $message }}
-        </div>
-    @enderror
-</div>
+                            <label>Nombre</label>
+                            <input type="text" placeholder="Ejemplo: JULIO-DICIEMBRE 2024" name="nombre"
+                                value="{{ old('nombre') }}"
+                                class="form-control @error('nombre') is-invalid @enderror" required>
+                            @error('nombre')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                        </div>
 
-<div class="form-group">
-    <label>ID Tipo Período</label>
-    <select name="id_tipo_periodo" 
-            class="form-control @error('id_tipo_periodo') is-invalid @enderror" 
-            required>
-        <option value="">-- Tipo de período --</option>
-        @foreach ($tipos as $tipo)
-            <option value="{{ $tipo->id }}" {{ old('id_tipo_periodo') == $tipo->id ? 'selected' : '' }}>
-                {{ $tipo->nombre }}
-            </option>
-        @endforeach
-    </select>
-    @error('id_tipo_periodo')
-        <div class="invalid-feedback">
-            {{ $message }}
-        </div>
-    @enderror
-</div>
+                        <div class="form-group">
+                            <label>Tipo Período</label>
+                            <select name="id_tipo_periodo" class="form-control" required>
+                                <option value="">Tipo de período</option>
+                                @foreach ($tipos as $tipo)
+                                    <option value="{{ $tipo->id_tipo_periodo }}"
+                                        {{ old('id_tipo_periodo') == $tipo->id_tipo_periodo ? 'selected' : '' }}>
+                                        {{ $tipo->nombre }}
+                                    </option>
+                                @endforeach
+                            </select>
 
-<div class="form-group">
-    <label>Fecha Inicio</label>
-    <input type="date" 
-           name="fecha_inicio"
-           value="{{ old('fecha_inicio') }}"
-           class="form-control @error('fecha_inicio') is-invalid @enderror" 
-           required>
-    @error('fecha_inicio')
-        <div class="invalid-feedback">
-            {{ $message }}
-        </div>
-    @enderror
-</div>
+                            @error('id_tipo_periodo')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                        </div>
 
-<div class="form-group">
-    <label>Fecha Fin</label>
-    <input type="date" 
-           name="fecha_fin"
-           value="{{ old('fecha_fin') }}"
-           class="form-control @error('fecha_fin') is-invalid @enderror" 
-           required>
-    @error('fecha_fin')
-        <div class="invalid-feedback">
-            {{ $message }}
-        </div>
-    @enderror
-</div>
+                        <div class="form-group">
+                            <label>Fecha Inicio</label>
+                            <input type="date" name="fecha_inicio" value="{{ old('fecha_inicio') }}"
+                                class="form-control @error('fecha_inicio') is-invalid @enderror" required>
+                            @error('fecha_inicio')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                        </div>
 
-<div class="form-group">
-    <label>Estado</label>
-    <select name="estado" 
-            class="form-control @error('estado') is-invalid @enderror" 
-            required>
-        <option value="">-- Selecciona --</option>
-        <option value="Abierto" {{ old('estado') == 'Abierto' ? 'selected' : '' }}>Abierto</option>
-        <option value="Cerrado" {{ old('estado') == 'Cerrado' ? 'selected' : '' }}>Cerrado</option>
-    </select>
-    @error('estado')
-        <div class="invalid-feedback">
-            {{ $message }}
-        </div>
-    @enderror
-</div>
+                        <div class="form-group">
+                            <label>Fecha Fin</label>
+                            <input type="date" name="fecha_fin" value="{{ old('fecha_fin') }}"
+                                class="form-control @error('fecha_fin') is-invalid @enderror" required>
+                            @error('fecha_fin')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                        </div>
+
+                        <div class="form-group">
+                            <label>Estado</label>
+                            <select name="estado" class="form-control @error('estado') is-invalid @enderror"
+                                required>
+                                <option value="">Selecciona</option>
+                                <option value="Abierto" {{ old('estado') == 'Abierto' ? 'selected' : '' }}>Abierto
+                                </option>
+                                <option value="Cerrado" {{ old('estado') == 'Cerrado' ? 'selected' : '' }}>Cerrado
+                                </option>
+                            </select>
+                            @error('estado')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                        </div>
 
 
 
