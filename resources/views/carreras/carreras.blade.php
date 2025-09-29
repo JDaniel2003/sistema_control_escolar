@@ -70,7 +70,8 @@
 
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link  text-white px-3 mr-1" href="{{ route('periodos.index') }}">Períodos Escolares</a>
+                    <a class="nav-link  text-white px-3 mr-1" href="{{ route('periodos.index') }}">Períodos
+                        Escolares</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link navbar-active-item px-3 mr-1" href="#">Carreras</a>
@@ -136,7 +137,7 @@
                             <!-- Botón para nuevo período -->
                             <div class="mb-3 text-right">
                                 <button type="button" class="btn btn-success" data-toggle="modal"
-                                    data-target="#nuevoPeriodoModal">
+                                    data-target="#nuevacarreraModal">
                                     <i class="fas fa-plus"></i> Nueva Carrea
                                 </button>
                             </div>
@@ -144,7 +145,7 @@
 
                             <!-- Filtros -->
                             <div class="container mb-4">
-                                <form id="filtrosForm" method="GET" action="{{ route('periodos.index') }}"
+                                <form id="filtrosForm" method="GET" action="{{ route('carreras.index') }}"
                                     class="row g-2">
 
                                     <div class="col-md-2">
@@ -152,28 +153,14 @@
                                             placeholder="Buscar por nombre" value="{{ request('nombre') }}">
                                     </div>
 
+                                    <div class="col-md-2">
+                                        <input type="text" name="duracion" class="form-control"
+                                            placeholder="Buscar por duracion" value="{{ request('duracion') }}">
+                                    </div>
+
+
+
                                     
-
-                                    <div class="col-md-2">
-                                        <input type="date" name="fecha_inicio" class="form-control"
-                                            value="{{ request('fecha_inicio') }}">
-                                    </div>
-
-                                    <div class="col-md-2">
-                                        <input type="date" name="fecha_fin" class="form-control"
-                                            value="{{ request('fecha_fin') }}">
-                                    </div>
-
-
-                                    <div class="col-md-2">
-                                        <select name="estado" class="form-control">
-                                            <option value="">-- Estado --</option>
-                                            <option value="Abierto"
-                                                {{ request('estado') == 'Abierto' ? 'selected' : '' }}>Abierto</option>
-                                            <option value="Cerrado"
-                                                {{ request('estado') == 'Cerrado' ? 'selected' : '' }}>Cerrado</option>
-                                        </select>
-                                    </div>
 
                                     <div class="col-md-2">
                                         <select name="mostrar" onchange="this.form.submit()" class="form-control">
@@ -192,7 +179,7 @@
 
                                     </div>
                                     <div class="col-md-2">
-                                        <a href="{{ route('periodos.index', ['mostrar' => 'todo']) }}"
+                                        <a href="{{ route('carreras.index', ['mostrar' => 'todo']) }}"
                                             class="btn btn-secondary w-100">
                                             Mostrar todo
                                         </a>
@@ -233,48 +220,153 @@
 
                             <!-- Tabla -->
 
-                            <div class="container">
-                                <h1 class="mb-4">Listado de Carreras</h1>
-
-                                @if (session('success'))
+                            <div class="card-body">
+                                    @if (session('success'))
                                     <div class="alert alert-success">{{ session('success') }}</div>
                                 @endif
 
-                                <a href="{{ route('carreras.create') }}" class="btn btn-primary mb-3">Nueva
-                                    Carrera</a>
-
-                                <table class="table table-bordered">
-                                    <thead class="thead-dark">
-                                        <tr>
-                                            <th>ID</th>
-                                            <th>Nombre</th>
-                                            <th>Duración</th>
-                                            <th>Acciones</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($carreras as $carrera)
+                                <div class="table-responsive">
+                                    <table class="table table-bordered table-hover">
+                                        <thead class="thead-dark text-center">
                                             <tr>
-                                                <td>{{ $carrera->id_carrera }}</td>
-                                                <td>{{ $carrera->nombre }}</td>
-                                                <td>{{ $carrera->duracion }}</td>
-                                                <td>
-                                                    <a href="{{ route('carreras.edit', $carrera) }}"
-                                                        class="btn btn-warning btn-sm">Editar</a>
-                                                    <form action="{{ route('carreras.destroy', $carrera) }}"
-                                                        method="POST" style="display:inline-block;">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="submit" class="btn btn-danger btn-sm"
-                                                            onclick="return confirm('¿Seguro que deseas eliminar esta carrera?')">
-                                                            Eliminar
-                                                        </button>
-                                                    </form>
-                                                </td>
+                                                <th>ID</th>
+                                                <th>Nombre</th>
+                                                <th>Duración</th>
+                                                <th>Acciones</th>
                                             </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($carreras as $carrera)
+                                                <tr class="text-center">
+                                                    <td>{{ $carrera->id_carrera }}</td>
+                                                    <td>{{ $carrera->nombre }}</td>
+                                                    <td>{{ $carrera->duracion }}</td>
+                                                    <td>
+                                                        <button type="button" class="btn btn-warning btn-sm"
+                                                            data-toggle="modal"
+                                                            data-target="#editarModal{{ $carrera->id_carrera }}">
+                                                            <i class="fas fa-edit"></i> Editar
+                                                        </button>
+
+                                                        <div class="modal fade"
+                                                            id="editarModal{{ $carrera->id_carrera }}"
+                                                            tabindex="-1" role="dialog"
+                                                            aria-labelledby="editarModalLabel{{ $carrera->id_carrera }}"
+                                                            aria-hidden="true">
+                                                            <div class="modal-dialog modal-lg" role="document">
+                                                                <div class="modal-content">
+
+                                                                    <div class="modal-header">
+                                                                        <h5 class="text-center"
+                                                                            id="editarModalLabel{{ $carrera->id_carrera }}"
+                                                                            style="padding-left: 280px;">Editar Carrera
+                                                                            Escolar</h5>
+                                                                        <button type="button"
+                                                                            class="close text-white"
+                                                                            data-dismiss="modal" aria-label="Cerrar">
+                                                                            <span aria-hidden="true">&times;</span>
+                                                                        </button>
+                                                                    </div>
+                                                                    <form
+                                                                        action="{{ route('carreras.update', $carrera->id_carrera) }}"
+                                                                        method="POST">
+                                                                        @csrf
+                                                                        @method('PUT')
+                                                                        
+                                                                        <div class="modal-body">
+
+                                                                            <div class="form-group">
+                                                                                <label style="text-align: left; display: block;">Nombre</label>
+                                                                                <input type="text" name="nombre" class="form-control" value="{{ $carrera->nombre }}" required>
+                                                                                @error('nombre')
+                                                                                    <div class="invalid-feedback">
+                                                                                        {{ $message }}</div>
+                                                                                @enderror
+                                                                            </div>
+                                                                            <div class="form-group">
+                                                                                <label style="text-align: left; display: block;">Duración</label>
+                                                                                <input type="text" name="duracion" class="form-control" value="{{ $carrera->duracion }}" required>
+                                                                                @error('duracion')
+                                                                                    <div class="invalid-feedback">
+                                                                                        {{ $message }}</div>
+                                                                                @enderror
+                                                                            </div>
+                                                                           
+                                                                        </div>
+                                                                        <div class="modal-footer">
+                                                                            <button type="button"
+                                                                                class="btn btn-secondary"
+                                                                                data-dismiss="modal">Cancelar</button>
+                                                                            <button type="submit"
+                                                                                class="btn btn-success">Actualizar</button>
+                                                                        </div>
+                                                                    </form>
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+
+                                                        <form action="{{ route('carreras.destroy', $carrera) }}"
+                                                            method="POST" style="display:inline-block;">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <button type="button" class="btn btn-danger btn-sm"
+                                                                data-toggle="modal"
+                                                                data-target="#eliminarModal{{ $carrera->id_carrera }}">
+                                                                <i class="fas fa-trash-alt"></i> Eliminar
+                                                            </button>
+
+                                                            <!-- Modal de Confirmación -->
+                                                            <div class="modal fade"
+                                                                id="eliminarModal{{ $carrera->id_carrera }}"
+                                                                tabindex="-1" role="dialog"
+                                                                aria-labelledby="eliminarModalLabel{{ $carrera->id_carrera }}"
+                                                                aria-hidden="true">
+                                                                <div class="modal-dialog modal-lg" role="document">
+                                                                    <div class="modal-content">
+                                                                        <div class="modal-header">
+
+                                                                            <h5 class="text-center"
+                                                                                id="eliminarModalLabel{{ $carrera->id_carrera }}"
+                                                                                style="padding-left: 280px;">Eliminar
+                                                                                Período</h5>
+                                                                            <button type="button" class="close"
+                                                                                data-dismiss="modal"
+                                                                                aria-label="Cerrar">
+                                                                                <span aria-hidden="true">&times;</span>
+                                                                            </button>
+                                                                        </div>
+                                                                        <div class="modal-body">
+                                                                            ¿Seguro que deseas eliminar la carrera
+                                                                            <strong>{{ $carrera->nombre }}</strong>?
+                                                                        </div>
+                                                                        <div class="modal-footer">
+                                                                            <button type="button"
+                                                                                class="btn btn-secondary"
+                                                                                data-dismiss="modal">Cancelar</button>
+                                                                            <form
+                                                                                action="{{ route('carreras.destroy', $carrera) }}"
+                                                                                method="POST"
+                                                                                style="display:inline-block;">
+                                                                                @csrf
+                                                                                @method('DELETE')
+                                                                                <button type="submit"
+                                                                                    class="btn btn-success">Eliminar</button>
+                                                                            </form>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                        </form>
+                                                        
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
 
                         </div>
@@ -308,62 +400,40 @@
 
 
     <!-- Modal Nuevo Período -->
-    <div class="modal fade" id="nuevoPeriodoModal" tabindex="-1" role="dialog"
+    <div class="modal fade" id="nuevacarreraModal" tabindex="-1" role="dialog"
         aria-labelledby="nuevoPeriodoLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
 
                 <div class="modal-header">
-                    <h5 class="text-center" id="nuevoPeriodoLabel" style="padding-left: 280px;">Nuevo Período Escolar
+                    <h5 class="text-center" id="nuevacarreraLabel" style="padding-left: 280px;">Nuevo Carrera
                     </h5>
                     <button type="button" class="close text-white" data-dismiss="modal" aria-label="Cerrar">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
 
-                <form action="{{ route('periodos.store') }}" method="POST">
+
+                <form action="{{ route('carreras.store') }}" method="POST">
                     @csrf
                     <div class="modal-body">
-
                         <div class="form-group">
                             <label>Nombre</label>
                             <input type="text" name="nombre" class="form-control" required>
                         </div>
 
                         <div class="form-group">
-                            <label>ID Tipo Período</label>
-                            <input type="number" name="id_tipo_periodo" class="form-control" required>
+                            <label>Duración</label>
+                            <input type="text" name="duracion" class="form-control">
                         </div>
-
-                        <div class="form-group">
-                            <label>Fecha Inicio</label>
-                            <input type="date" name="fecha_inicio" class="form-control" required>
-                        </div>
-
-                        <div class="form-group">
-                            <label>Fecha Fin</label>
-                            <input type="date" name="fecha_fin" class="form-control" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Estado</label>
-                            <select name="estado" class="form-control" required>
-                                <option value="">-- Selecciona --</option>
-                                <option value="Abierto" {{ old('estado') == 'Abierto' ? 'selected' : '' }}>Abierto
-                                </option>
-                                <option value="Cerrado" {{ old('estado') == 'Cerrado' ? 'selected' : '' }}>Cerrado
-                                </option>
-                            </select>
-                        </div>
-
-
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
                         <button type="submit" class="btn btn-success">Guardar</button>
-                    </div>
+                        <a href="{{ route('carreras.index') }}" class="btn btn-secondary">Cancelar</a>
                 </form>
             </div>
         </div>
+    </div>
     </div>
 
 

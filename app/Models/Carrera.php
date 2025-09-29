@@ -13,6 +13,6 @@ class Carrera extends Model
     protected $fillable = [
         'nombre',
         'duracion',
-        'datos',
+        'datos'
     ];
 }

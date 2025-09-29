@@ -304,7 +304,8 @@
                                                                         <div class="modal-body">
 
                                                                             <div class="form-group">
-                                                                                <label>Nombre</label>
+                                                                                <label style="text-align: left; display: block;">Nombre</label>
+
                                                                                 <input type="text"
                                                                                     placeholder="Ejemplo: JULIO-DICIEMBRE 2024"
                                                                                     name="nombre"
@@ -318,7 +319,7 @@
                                                                             </div>
 
                                                                             <div class="form-group">
-                                                                                <label>Tipo Período</label>
+                                                                                <label style="text-align: left; display: block;">Tipo Período</label>
                                                                                 <select name="id_tipo_periodo"
                                                                                     class="form-control" required>
                                                                                     <option value="">Tipo de
@@ -338,7 +339,7 @@
                                                                             </div>
 
                                                                             <div class="form-group">
-                                                                                <label>Fecha Inicio</label>
+                                                                                <label style="text-align: left; display: block;">Fecha Inicio</label>
                                                                                 <input type="date"
                                                                                     name="fecha_inicio"
                                                                                     value="{{ $periodo->fecha_inicio }}"
@@ -351,7 +352,7 @@
                                                                             </div>
 
                                                                             <div class="form-group">
-                                                                                <label>Fecha Fin</label>
+                                                                                <label style="text-align: left; display: block;">Fecha Fin</label>
                                                                                 <input type="date" name="fecha_fin"
                                                                                     value="{{ $periodo->fecha_fin }}"
                                                                                     class="form-control @error('fecha_fin') is-invalid @enderror"
@@ -363,7 +364,7 @@
                                                                             </div>
 
                                                                             <div class="form-group">
-                                                                                <label>Estado</label>
+                                                                                <label style="text-align: left; display: block;">Estado</label>
                                                                                 <select name="estado"
                                                                                     class="form-control @error('estado') is-invalid @enderror"
                                                                                     required>

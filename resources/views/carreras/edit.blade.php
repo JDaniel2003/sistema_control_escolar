@@ -23,10 +23,6 @@
             <input type="text" name="duracion" class="form-control" value="{{ $carrera->duracion }}">
         </div>
 
-        <div class="form-group">
-            <label>Datos (JSON opcional)</label>
-            <textarea name="datos" class="form-control">{{ $carrera->datos }}</textarea>
-        </div>
 
         <button type="submit" class="btn btn-success">Actualizar</button>
         <a href="{{ route('carreras.index') }}" class="btn btn-secondary">Cancelar</a>

@@ -7,13 +7,21 @@ use Illuminate\Http\Request;
 
 class CarreraController extends Controller
 {
-    public function index()
-    {
-        $carreras = Carrera::all();
-        return view('carreras.carreras', compact('carreras'));
+    public function index(Request $request) 
+{
+    $query = Carrera::query();
 
+    if ($request->filled('nombre')) {
+        $query->where('nombre', 'like', '%' . $request->nombre . '%');
+    }
+    if ($request->filled('duracion')) {
+        $query->where('duracion', 'like', '%' . $request->duracion . '%');
     }
 
+    $carreras = $query->get();
+
+    return view('carreras.carreras', compact('carreras'));
+}
     public function create()
     {
         return view('carreras.create');
@@ -24,7 +32,6 @@ class CarreraController extends Controller
         $request->validate([
             'nombre' => 'required|string|max:100',
             'duracion' => 'nullable|string|max:10',
-            'datos' => 'nullable|json',
         ]);
 
         Carrera::create($request->all());
@@ -33,29 +40,32 @@ class CarreraController extends Controller
                          ->with('success', 'Carrera creada correctamente.');
     }
 
-    public function edit(Carrera $carrera)
+    public function edit($id)
+{
+    $carrera = Carrera::findOrFail($id);
+    return view('carreras.edit', compact('carrera'));
+}
+
+public function update(Request $request, $id)
+{
+    $carrera = Carrera::findOrFail($id);
+    
+    $request->validate([
+        'nombre' => 'required|string|max:100',
+        'duracion' => 'nullable|string|max:10',
+    ]);
+
+    $carrera->update($request->all());
+
+    return redirect()->route('carreras.index')
+                     ->with('success', 'Carrera actualizada correctamente.');
+}
+    public function destroy($id)
     {
-        return view('carreras.edit', compact('carrera'));
-    }
-
-    public function update(Request $request, Carrera $carrera)
-    {
-        $request->validate([
-            'nombre' => 'required|string|max:100',
-            'duracion' => 'nullable|string|max:10',
-            'datos' => 'nullable|json',
-        ]);
-
-        $carrera->update($request->all());
-
-        return redirect()->route('carreras.index')
-                         ->with('success', 'Carrera actualizada correctamente.');
-    }
-
-    public function destroy(Carrera $carrera)
-    {
+        $carrera = Carrera::findOrFail($id);
         $carrera->delete();
+
         return redirect()->route('carreras.index')
-                         ->with('success', 'Carrera eliminada correctamente.');
+            ->with('success', 'Período escolar eliminado correctamente.');
     }
 }

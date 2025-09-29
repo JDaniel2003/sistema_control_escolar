@@ -37,12 +37,12 @@ Route::resource('periodos', PeriodoEscolarController::class);
 
 
 
-Route::get('/carreras', [PeriodoEscolarController::class, 'index'])->name('carreras');
-Route::get('/carreras/create', [PeriodoEscolarController::class, 'create'])->name('carreras.create');
-Route::post('/carreras', [PeriodoEscolarController::class, 'store'])->name('carreras.store');
-Route::get('/carreras/{id}/edit', [PeriodoEscolarController::class, 'edit'])->name('carreras.edit');
-Route::put('/carreras/{id}', [PeriodoEscolarController::class, 'update'])->name('carreras.update');
-Route::delete('/carreras/{id}', [PeriodoEscolarController::class, 'destroy'])->name('carreras.destroy');
+Route::get('/carreras', [CarreraController::class, 'index'])->name('carreras');
+Route::get('/carreras/create', [CarreraController::class, 'create'])->name('carreras.create');
+Route::post('/carreras', [CarreraController::class, 'store'])->name('carreras.store');
+Route::get('/carreras/{id}/edit', [CarreraController::class, 'edit'])->name('carreras.edit');
+Route::put('/carreras/{id}', [CarreraController::class, 'update'])->name('carreras.update');
+Route::delete('/carreras/{id}', [CarreraController::class, 'destroy'])->name('carreras.destroy');
 Route::resource('carreras', CarreraController::class);
 #Route::get('/login', function () {
  #   return view('auth.login');
