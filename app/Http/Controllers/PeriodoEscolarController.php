@@ -12,6 +12,8 @@ class PeriodoEscolarController extends Controller
     {
         $query = PeriodoEscolar::with('tipoPeriodo');
 
+
+        
         // Filtro por nombre
         if ($request->filled('nombre')) {
             $query->where('nombre', 'like', '%' . $request->nombre . '%');
@@ -23,13 +25,15 @@ class PeriodoEscolarController extends Controller
         }
 
         // Filtro por fechas
-        if ($request->filled('fecha_inicio')) {
-            $query->whereDate('fecha_inicio', '>=', $request->fecha_inicio);
-        }
+        // ---- Filtro por fecha exacta ----
+if ($request->filled('fecha_inicio')) {
+    $query->whereDate('fecha_inicio', $request->fecha_inicio);
+}
 
-        if ($request->filled('fecha_fin')) {
-            $query->whereDate('fecha_fin', '<=', $request->fecha_fin);
-        }
+if ($request->filled('fecha_fin')) {
+    $query->whereDate('fecha_fin', $request->fecha_fin);
+}
+
 
         // Filtro por tipo de período
         if ($request->filled('id_tipo_periodo')) {
@@ -45,6 +49,8 @@ class PeriodoEscolarController extends Controller
         } else {
             $periodos = $query->orderBy('id_periodo_escolar', 'desc')->paginate((int)$mostrar);
         }
+
+        
         // Para llenar el select de tipos
         $tipos = TipoPeriodo::all();
         return view('layouts.periodos', compact('periodos', 'tipos'));

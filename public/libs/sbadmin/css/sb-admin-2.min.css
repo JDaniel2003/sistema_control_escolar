@@ -2408,20 +2408,22 @@ fieldset:disabled a.btn {
 }
 
 .btn-secondary {
-  color: #fff;
-  background-color: #858796;
-  border-color: #858796;
+  color: #6e707e;
+  background-color: #fff;
+  border: 1px solid #d1d3e2;
 
     width: auto;           /* se ajusta al contenido */
     padding: 0.375rem 0.75rem; /* espacio arriba/abajo y a los lados */
     white-space: nowrap;   /* evita que el texto se rompa en varias líneas */
+
+    border-radius: 0.35rem;
 }
 
 
 .btn-secondary:hover {
   color: #fff;
-  background-color: #717384;
-  border-color: #6b6d7d;
+  background-color: #9a9db3;
+  border-color: #9a9db3;
 }
 
 .btn-secondary:focus, .btn-secondary.focus {
@@ -2524,46 +2526,46 @@ fieldset:disabled a.btn {
 }
 
 .btn-warning {
-  color: #fff;
-  background-color: #f6c23e;
-  border-color: #f6c23e;
+ color: #5B8736;
+  background-color: #fff;
+  border: 1px solid #d1d3e2;
 }
 
 .btn-warning:hover {
   color: #fff;
-  background-color: #f4b619;
-  border-color: #f4b30d;
+  background-color: #5B8736;
+  border-color: #5B8736;
 }
 
 .btn-warning:focus, .btn-warning.focus {
   color: #fff;
-  background-color: #f4b619;
-  border-color: #f4b30d;
-  box-shadow: 0 0 0 0.2rem rgba(247, 203, 91, 0.5);
+  background-color: #5B8736;
+  border-color: #5B8736;
+  box-shadow: 0 0 0 0.2rem rgba(41, 207, 8, 0.5);
 }
 
 .btn-warning.disabled, .btn-warning:disabled {
   color: #fff;
-  background-color: #f6c23e;
-  border-color: #f6c23e;
+  background-color: #5B8736;
+  border-color: #5B8736;
 }
 
 .btn-warning:not(:disabled):not(.disabled):active, .btn-warning:not(:disabled):not(.disabled).active,
 .show > .btn-warning.dropdown-toggle {
   color: #fff;
-  background-color: #f4b30d;
-  border-color: #e9aa0b;
+  background-color: #5B8736;
+  border-color: #5B8736;
 }
 
 .btn-warning:not(:disabled):not(.disabled):active:focus, .btn-warning:not(:disabled):not(.disabled).active:focus,
 .show > .btn-warning.dropdown-toggle:focus {
-  box-shadow: 0 0 0 0.2rem rgba(247, 203, 91, 0.5);
+  box-shadow: 0 0 0 0.2rem rgba(41, 207, 8, 0.5);
 }
 
 .btn-danger {
-  color: #fff;
-  background-color: #8A1010;
-  border-color: #8A1010;
+  color: #8A1010;
+  background-color: #fff;
+  border: 1px solid #d1d3e2;
 }
 
 .btn-danger:hover {

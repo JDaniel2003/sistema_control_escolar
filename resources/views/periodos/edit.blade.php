@@ -83,6 +83,7 @@
         <a href="{{ route('periodos.index') }}" class="btn btn-secondary">Cancelar</a>
     </form>
 </div>
+
 <!-- Bootstrap core JavaScript-->
 <script src="{{ asset('libs/jquery/jquery.min.js') }}"></script>
 <script src="{{ asset('libs/bootstrap/js/bootstrap.bundle.min.js') }}"></script>

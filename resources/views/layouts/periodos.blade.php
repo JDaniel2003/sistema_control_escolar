@@ -236,11 +236,6 @@
                                 });
                             </script>
 
-
-
-
-
-
                             <!-- Tabla -->
 
                             <div class="card-body">
@@ -271,18 +266,187 @@
                                                     <td>{{ $periodo->fecha_fin }}</td>
                                                     <td>{{ $periodo->estado }}</td>
                                                     <td>
-                                                        <a href="{{ route('periodos.edit', $periodo) }}"
-                                                            class="btn btn-warning btn-sm modal-open">
+                                                        <!-- Botón Editar -->
+                                                        <button type="button" class="btn btn-warning btn-sm"
+                                                            data-toggle="modal"
+                                                            data-target="#editarModal{{ $periodo->id_periodo_escolar }}">
                                                             <i class="fas fa-edit"></i> Editar
-                                                        </a>
+                                                        </button>
+
+                                                        <!-- Modal Editar -->
+                                                        <div class="modal fade"
+                                                            id="editarModal{{ $periodo->id_periodo_escolar }}"
+                                                            tabindex="-1" role="dialog"
+                                                            aria-labelledby="editarModalLabel{{ $periodo->id_periodo_escolar }}"
+                                                            aria-hidden="true">
+                                                            <div class="modal-dialog modal-lg" role="document">
+                                                                <div class="modal-content">
+
+                                                                    <div class="modal-header">
+                                                                        <h5 class="text-center"
+                                                                            id="editarModalLabel{{ $periodo->id_periodo_escolar }}"
+                                                                            style="padding-left: 280px;">Editar Período
+                                                                            Escolar</h5>
+                                                                        <button type="button"
+                                                                            class="close text-white"
+                                                                            data-dismiss="modal" aria-label="Cerrar">
+                                                                            <span aria-hidden="true">&times;</span>
+                                                                        </button>
+                                                                    </div>
+
+
+
+                                                                    <form
+                                                                        action="{{ route('periodos.update', $periodo->id_periodo_escolar) }}"
+                                                                        method="POST">
+                                                                        @csrf
+                                                                        @method('PUT')
+                                                                        <div class="modal-body">
+
+                                                                            <div class="form-group">
+                                                                                <label>Nombre</label>
+                                                                                <input type="text"
+                                                                                    placeholder="Ejemplo: JULIO-DICIEMBRE 2024"
+                                                                                    name="nombre"
+                                                                                    value="{{ $periodo->nombre }}"
+                                                                                    class="form-control @error('nombre') is-invalid @enderror"
+                                                                                    required>
+                                                                                @error('nombre')
+                                                                                    <div class="invalid-feedback">
+                                                                                        {{ $message }}</div>
+                                                                                @enderror
+                                                                            </div>
+
+                                                                            <div class="form-group">
+                                                                                <label>Tipo Período</label>
+                                                                                <select name="id_tipo_periodo"
+                                                                                    class="form-control" required>
+                                                                                    <option value="">Tipo de
+                                                                                        período</option>
+                                                                                    @foreach ($tipos as $tipo)
+                                                                                        <option
+                                                                                            value="{{ $tipo->id_tipo_periodo }}"
+                                                                                            {{ $periodo->id_tipo_periodo == $tipo->id_tipo_periodo ? 'selected' : '' }}>
+                                                                                            {{ $tipo->nombre }}
+                                                                                        </option>
+                                                                                    @endforeach
+                                                                                </select>
+                                                                                @error('id_tipo_periodo')
+                                                                                    <div class="invalid-feedback">
+                                                                                        {{ $message }}</div>
+                                                                                @enderror
+                                                                            </div>
+
+                                                                            <div class="form-group">
+                                                                                <label>Fecha Inicio</label>
+                                                                                <input type="date"
+                                                                                    name="fecha_inicio"
+                                                                                    value="{{ $periodo->fecha_inicio }}"
+                                                                                    class="form-control @error('fecha_inicio') is-invalid @enderror"
+                                                                                    required>
+                                                                                @error('fecha_inicio')
+                                                                                    <div class="invalid-feedback">
+                                                                                        {{ $message }}</div>
+                                                                                @enderror
+                                                                            </div>
+
+                                                                            <div class="form-group">
+                                                                                <label>Fecha Fin</label>
+                                                                                <input type="date" name="fecha_fin"
+                                                                                    value="{{ $periodo->fecha_fin }}"
+                                                                                    class="form-control @error('fecha_fin') is-invalid @enderror"
+                                                                                    required>
+                                                                                @error('fecha_fin')
+                                                                                    <div class="invalid-feedback">
+                                                                                        {{ $message }}</div>
+                                                                                @enderror
+                                                                            </div>
+
+                                                                            <div class="form-group">
+                                                                                <label>Estado</label>
+                                                                                <select name="estado"
+                                                                                    class="form-control @error('estado') is-invalid @enderror"
+                                                                                    required>
+                                                                                    <option value="">Selecciona
+                                                                                    </option>
+                                                                                    <option value="Abierto"
+                                                                                        {{ $periodo->estado == 'Abierto' ? 'selected' : '' }}>
+                                                                                        Abierto</option>
+                                                                                    <option value="Cerrado"
+                                                                                        {{ $periodo->estado == 'Cerrado' ? 'selected' : '' }}>
+                                                                                        Cerrado</option>
+                                                                                </select>
+                                                                                @error('estado')
+                                                                                    <div class="invalid-feedback">
+                                                                                        {{ $message }}</div>
+                                                                                @enderror
+                                                                            </div>
+
+                                                                        </div>
+                                                                        <div class="modal-footer">
+                                                                            <button type="button"
+                                                                                class="btn btn-secondary"
+                                                                                data-dismiss="modal">Cancelar</button>
+                                                                            <button type="submit"
+                                                                                class="btn btn-success">Actualizar</button>
+                                                                        </div>
+                                                                    </form>
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                         <form action="{{ route('periodos.destroy', $periodo) }}"
                                                             method="POST" style="display:inline-block;">
                                                             @csrf
                                                             @method('DELETE')
-                                                            <button type="submit" class="btn btn-danger btn-sm"
-                                                                onclick="return confirm('¿Seguro que deseas eliminar este período?')">
+                                                            <button type="button" class="btn btn-danger btn-sm"
+                                                                data-toggle="modal"
+                                                                data-target="#eliminarModal{{ $periodo->id_periodo_escolar }}">
                                                                 <i class="fas fa-trash-alt"></i> Eliminar
                                                             </button>
+
+                                                            <!-- Modal de Confirmación -->
+                                                            <div class="modal fade"
+                                                                id="eliminarModal{{ $periodo->id_periodo_escolar }}"
+                                                                tabindex="-1" role="dialog"
+                                                                aria-labelledby="eliminarModalLabel{{ $periodo->id_periodo_escolar }}"
+                                                                aria-hidden="true">
+                                                                <div class="modal-dialog modal-lg" role="document">
+                                                                    <div class="modal-content">
+                                                                        <div class="modal-header">
+
+                                                                            <h5 class="text-center"
+                                                                                id="eliminarModalLabel{{ $periodo->id_periodo_escolar }}"
+                                                                                style="padding-left: 280px;">Eliminar
+                                                                                Período</h5>
+                                                                            <button type="button" class="close"
+                                                                                data-dismiss="modal"
+                                                                                aria-label="Cerrar">
+                                                                                <span aria-hidden="true">&times;</span>
+                                                                            </button>
+                                                                        </div>
+                                                                        <div class="modal-body">
+                                                                            ¿Seguro que deseas eliminar el período
+                                                                            <strong>{{ $periodo->nombre }}</strong>?
+                                                                        </div>
+                                                                        <div class="modal-footer">
+                                                                            <button type="button"
+                                                                                class="btn btn-secondary"
+                                                                                data-dismiss="modal">Cancelar</button>
+                                                                            <form
+                                                                                action="{{ route('periodos.destroy', $periodo) }}"
+                                                                                method="POST"
+                                                                                style="display:inline-block;">
+                                                                                @csrf
+                                                                                @method('DELETE')
+                                                                                <button type="submit"
+                                                                                    class="btn btn-success">Eliminar</button>
+                                                                            </form>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
                                                         </form>
                                                     </td>
                                                 </tr>
@@ -428,6 +592,13 @@
             </div>
         </div>
     </div>
+
+
+
+
+
+
+
 
     @if ($errors->any())
         <script>
