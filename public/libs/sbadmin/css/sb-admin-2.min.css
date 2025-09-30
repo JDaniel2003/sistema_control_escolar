@@ -240,6 +240,7 @@ th {
 label {
   display: inline-block;
   margin-bottom: 0.5rem;
+  margin-left: 10px;
 }
 
 button {
@@ -255,7 +256,7 @@ button,
 select,
 optgroup,
 textarea {
-  margin: 0;
+  margin: 8.5px;
   font-family: inherit;
   font-size: inherit;
   line-height: inherit;
@@ -1506,7 +1507,7 @@ pre code {
 .table th,
 .table td {
   padding: 0.75rem;
-  vertical-align: top;
+  /*vertical-align: top;*/
   border-top: 1px solid #e3e6f0;
 }
 
@@ -1973,7 +1974,7 @@ select.form-control:focus::-ms-value {
 .form-control-sm {
   height: calc(1.5em + 0.5rem + 2px);
   padding: 0.25rem 0.5rem;
-  font-size: 0.875rem;
+  font-size: 1rem;
   line-height: 1.5;
   border-radius: 0.2rem;
 }
@@ -2958,7 +2959,7 @@ fieldset:disabled a.btn {
 
 .btn-sm, .btn-group-sm > .btn {
   padding: 0.25rem 0.5rem;
-  font-size: 0.875rem;
+  font-size: 0.9rem;
   line-height: 1.5;
   border-radius: 0.2rem;
 }
@@ -6593,7 +6594,7 @@ button.bg-danger:focus {
 }
 
 .bg-light {
-  background-color: #8A1010 !important;
+  background-color: #fff !important;
 }
 
 a.bg-light:hover, a.bg-light:focus,
@@ -7104,10 +7105,12 @@ button.bg-dark:focus {
 
 .align-items-end {
   align-items: flex-end !important;
+  
 }
 
 .align-items-center {
   align-items: center !important;
+  justify-content: center;
 }
 
 .align-items-baseline {

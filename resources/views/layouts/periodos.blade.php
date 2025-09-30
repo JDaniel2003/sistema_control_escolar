@@ -143,17 +143,18 @@
 
 
                             <!-- Filtros -->
-                            <div class="container mb-4">
-                                <form id="filtrosForm" method="GET" action="{{ route('periodos.index') }}"
-                                    class="row g-2">
+                            <div class="container mb-4 d-flex justify-content-center">
+                                <div class="p-3 border rounded bg-light d-inline-block shadow-sm">
+                                    <form id="filtrosForm" method="GET" action="{{ route('periodos.index') }}"
+                                        class="d-flex flex-wrap gap-2 align-items-center">
 
-                                    <div class="col-md-2">
-                                        <input type="text" name="nombre" class="form-control"
+                                        <!-- Nombre -->
+                                        <input type="text" name="nombre"
+                                            class="form-control form-control-sm w-auto"
                                             placeholder="Buscar por nombre" value="{{ request('nombre') }}">
-                                    </div>
 
-                                    <div class="col-md-2">
-                                        <select name="id_tipo_periodo" class="form-control" required>
+                                        <!-- Tipo de período -->
+                                        <select name="id_tipo_periodo" class="form-control form-control-sm w-auto">
                                             <option value="">Tipo de período</option>
                                             @foreach ($tipos as $tipo)
                                                 <option value="{{ $tipo->id_tipo_periodo }}"
@@ -162,31 +163,29 @@
                                                 </option>
                                             @endforeach
                                         </select>
-                                    </div>
 
-                                    <div class="col-md-2">
-                                        <input type="date" name="fecha_inicio" class="form-control"
+                                        <!-- Fecha inicio -->
+                                        <input type="date" name="fecha_inicio"
+                                            class="form-control form-control-sm w-auto"
                                             value="{{ request('fecha_inicio') }}">
-                                    </div>
 
-                                    <div class="col-md-2">
-                                        <input type="date" name="fecha_fin" class="form-control"
+                                        <!-- Fecha fin -->
+                                        <input type="date" name="fecha_fin"
+                                            class="form-control form-control-sm w-auto"
                                             value="{{ request('fecha_fin') }}">
-                                    </div>
 
-
-                                    <div class="col-md-2">
-                                        <select name="estado" class="form-control">
+                                        <!-- Estado -->
+                                        <select name="estado" class="form-control form-control-sm w-auto">
                                             <option value="">Estado</option>
                                             <option value="Abierto"
                                                 {{ request('estado') == 'Abierto' ? 'selected' : '' }}>Abierto</option>
                                             <option value="Cerrado"
                                                 {{ request('estado') == 'Cerrado' ? 'selected' : '' }}>Cerrado</option>
                                         </select>
-                                    </div>
 
-                                    <div class="col-md-2">
-                                        <select name="mostrar" onchange="this.form.submit()" class="form-control">
+                                        <!-- Mostrar -->
+                                        <select name="mostrar" onchange="this.form.submit()"
+                                            class="form-control form-control-sm w-auto">
                                             <option value="10" {{ request('mostrar') == 10 ? 'selected' : '' }}>10
                                             </option>
                                             <option value="13" {{ request('mostrar') == 13 ? 'selected' : '' }}>13
@@ -196,20 +195,18 @@
                                             <option value="50" {{ request('mostrar') == 50 ? 'selected' : '' }}>50
                                             </option>
                                             <option value="todo"
-                                                {{ request('mostrar') == 'todo' ? 'selected' : '' }}>
-                                                Todo</option>
+                                                {{ request('mostrar') == 'todo' ? 'selected' : '' }}>Todo</option>
                                         </select>
 
-                                    </div>
-                                    <div class="col-md-2">
+                                        <!-- Botón Mostrar todo -->
                                         <a href="{{ route('periodos.index', ['mostrar' => 'todo']) }}"
-                                            class="btn btn-secondary w-100">
-                                            Mostrar todo
+                                            class="btn btn-sm btn-outline-secondary d-flex align-items-center">
+                                            <i class="fas fa-list me-1"></i> Mostrar todo
                                         </a>
-                                    </div>
-
-                                </form>
+                                    </form>
+                                </div>
                             </div>
+
 
                             <script>
                                 document.addEventListener("DOMContentLoaded", function() {
@@ -304,7 +301,8 @@
                                                                         <div class="modal-body">
 
                                                                             <div class="form-group">
-                                                                                <label style="text-align: left; display: block;">Nombre</label>
+                                                                                <label
+                                                                                    style="text-align: left; display: block;">Nombre</label>
 
                                                                                 <input type="text"
                                                                                     placeholder="Ejemplo: JULIO-DICIEMBRE 2024"
@@ -319,7 +317,9 @@
                                                                             </div>
 
                                                                             <div class="form-group">
-                                                                                <label style="text-align: left; display: block;">Tipo Período</label>
+                                                                                <label
+                                                                                    style="text-align: left; display: block;">Tipo
+                                                                                    Período</label>
                                                                                 <select name="id_tipo_periodo"
                                                                                     class="form-control" required>
                                                                                     <option value="">Tipo de
@@ -339,7 +339,9 @@
                                                                             </div>
 
                                                                             <div class="form-group">
-                                                                                <label style="text-align: left; display: block;">Fecha Inicio</label>
+                                                                                <label
+                                                                                    style="text-align: left; display: block;">Fecha
+                                                                                    Inicio</label>
                                                                                 <input type="date"
                                                                                     name="fecha_inicio"
                                                                                     value="{{ $periodo->fecha_inicio }}"
@@ -352,7 +354,9 @@
                                                                             </div>
 
                                                                             <div class="form-group">
-                                                                                <label style="text-align: left; display: block;">Fecha Fin</label>
+                                                                                <label
+                                                                                    style="text-align: left; display: block;">Fecha
+                                                                                    Fin</label>
                                                                                 <input type="date" name="fecha_fin"
                                                                                     value="{{ $periodo->fecha_fin }}"
                                                                                     class="form-control @error('fecha_fin') is-invalid @enderror"
@@ -364,7 +368,8 @@
                                                                             </div>
 
                                                                             <div class="form-group">
-                                                                                <label style="text-align: left; display: block;">Estado</label>
+                                                                                <label
+                                                                                    style="text-align: left; display: block;">Estado</label>
                                                                                 <select name="estado"
                                                                                     class="form-control @error('estado') is-invalid @enderror"
                                                                                     required>
@@ -453,7 +458,7 @@
                                                 </tr>
                                             @empty
                                                 <tr>
-                                                    <td colspan="6" class="text-center text-muted">No hay períodos
+                                                    <td colspan="100" class="text-center text-muted">No hay períodos
                                                         registrados</td>
                                                 </tr>
                                             @endforelse

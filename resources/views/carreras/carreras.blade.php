@@ -144,26 +144,24 @@
 
 
                             <!-- Filtros -->
-                            <div class="container mb-4">
-                                <form id="filtrosForm" method="GET" action="{{ route('carreras.index') }}"
-                                    class="row g-2">
+                            <div class="container mb-4 d-flex justify-content-center">
+                                <div class="p-3 border rounded bg-light d-inline-block shadow-sm">
+                                    <form id="filtrosForm" method="GET" action="{{ route('carreras.index') }}"
+                                        class="d-inline-flex flex-wrap gap-2 align-items-center">
 
-                                    <div class="col-md-2">
-                                        <input type="text" name="nombre" class="form-control"
+                                        <!-- Nombre -->
+                                        <input type="text" name="nombre"
+                                            class="form-control form-control-sm w-auto"
                                             placeholder="Buscar por nombre" value="{{ request('nombre') }}">
-                                    </div>
 
-                                    <div class="col-md-2">
-                                        <input type="text" name="duracion" class="form-control"
-                                            placeholder="Buscar por duracion" value="{{ request('duracion') }}">
-                                    </div>
+                                        <!-- Duración -->
+                                        <input type="text" name="duracion"
+                                            class="form-control form-control-sm w-auto"
+                                            placeholder="Buscar por duración" value="{{ request('duracion') }}">
 
-
-
-                                    
-
-                                    <div class="col-md-2">
-                                        <select name="mostrar" onchange="this.form.submit()" class="form-control">
+                                        <!-- Mostrar -->
+                                        <select name="mostrar" onchange="this.form.submit()"
+                                            class="form-control form-control-sm w-auto">
                                             <option value="10" {{ request('mostrar') == 10 ? 'selected' : '' }}>10
                                             </option>
                                             <option value="13" {{ request('mostrar') == 13 ? 'selected' : '' }}>13
@@ -173,20 +171,18 @@
                                             <option value="50" {{ request('mostrar') == 50 ? 'selected' : '' }}>50
                                             </option>
                                             <option value="todo"
-                                                {{ request('mostrar') == 'todo' ? 'selected' : '' }}>
-                                                Todo</option>
+                                                {{ request('mostrar') == 'todo' ? 'selected' : '' }}>Todo</option>
                                         </select>
 
-                                    </div>
-                                    <div class="col-md-2">
+                                        <!-- Botón Mostrar todo -->
                                         <a href="{{ route('carreras.index', ['mostrar' => 'todo']) }}"
-                                            class="btn btn-secondary w-100">
-                                            Mostrar todo
+                                            class="btn btn-sm btn-outline-secondary d-flex align-items-center">
+                                            <i class="fas fa-list me-1"></i> Mostrar todo
                                         </a>
-                                    </div>
-
-                                </form>
+                                    </form>
+                                </div>
                             </div>
+
 
                             <script>
                                 document.addEventListener("DOMContentLoaded", function() {
@@ -221,7 +217,7 @@
                             <!-- Tabla -->
 
                             <div class="card-body">
-                                    @if (session('success'))
+                                @if (session('success'))
                                     <div class="alert alert-success">{{ session('success') }}</div>
                                 @endif
 
@@ -236,7 +232,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach ($carreras as $carrera)
+                                            @forelse ($carreras as $carrera)
                                                 <tr class="text-center">
                                                     <td>{{ $carrera->id_carrera }}</td>
                                                     <td>{{ $carrera->nombre }}</td>
@@ -249,8 +245,8 @@
                                                         </button>
 
                                                         <div class="modal fade"
-                                                            id="editarModal{{ $carrera->id_carrera }}"
-                                                            tabindex="-1" role="dialog"
+                                                            id="editarModal{{ $carrera->id_carrera }}" tabindex="-1"
+                                                            role="dialog"
                                                             aria-labelledby="editarModalLabel{{ $carrera->id_carrera }}"
                                                             aria-hidden="true">
                                                             <div class="modal-dialog modal-lg" role="document">
@@ -272,26 +268,34 @@
                                                                         method="POST">
                                                                         @csrf
                                                                         @method('PUT')
-                                                                        
+
                                                                         <div class="modal-body">
 
                                                                             <div class="form-group">
-                                                                                <label style="text-align: left; display: block;">Nombre</label>
-                                                                                <input type="text" name="nombre" class="form-control" value="{{ $carrera->nombre }}" required>
+                                                                                <label
+                                                                                    style="text-align: left; display: block;">Nombre</label>
+                                                                                <input type="text" name="nombre"
+                                                                                    class="form-control"
+                                                                                    value="{{ $carrera->nombre }}"
+                                                                                    required>
                                                                                 @error('nombre')
                                                                                     <div class="invalid-feedback">
                                                                                         {{ $message }}</div>
                                                                                 @enderror
                                                                             </div>
                                                                             <div class="form-group">
-                                                                                <label style="text-align: left; display: block;">Duración</label>
-                                                                                <input type="text" name="duracion" class="form-control" value="{{ $carrera->duracion }}" required>
+                                                                                <label
+                                                                                    style="text-align: left; display: block;">Duración</label>
+                                                                                <input type="text" name="duracion"
+                                                                                    class="form-control"
+                                                                                    value="{{ $carrera->duracion }}"
+                                                                                    required>
                                                                                 @error('duracion')
                                                                                     <div class="invalid-feedback">
                                                                                         {{ $message }}</div>
                                                                                 @enderror
                                                                             </div>
-                                                                           
+
                                                                         </div>
                                                                         <div class="modal-footer">
                                                                             <button type="button"
@@ -360,10 +364,15 @@
                                                             </div>
 
                                                         </form>
-                                                        
+
                                                     </td>
                                                 </tr>
-                                            @endforeach
+                                            @empty
+                                                <tr>
+                                                    <td colspan="100" class="text-center text-muted">No hay carreras
+                                                        registradas</td>
+                                                </tr>
+                                            @endforelse
                                         </tbody>
                                     </table>
                                 </div>
