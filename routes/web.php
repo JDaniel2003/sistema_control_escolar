@@ -3,7 +3,7 @@ use App\Http\Controllers\PeriodoEscolarController;
 use App\Http\Controllers\Auth\LoginController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CarreraController;
-
+use App\Http\Controllers\PlanEstudioController;
 
 #----------------------login-----------------------
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
@@ -44,6 +44,15 @@ Route::get('/carreras/{id}/edit', [CarreraController::class, 'edit'])->name('car
 Route::put('/carreras/{id}', [CarreraController::class, 'update'])->name('carreras.update');
 Route::delete('/carreras/{id}', [CarreraController::class, 'destroy'])->name('carreras.destroy');
 Route::resource('carreras', CarreraController::class);
+
+
+Route::get('/planes', [PlanEstudioController::class, 'index'])->name('planes');
+Route::get('/planes/create', [PlanEstudioController::class, 'create'])->name('planes.create');
+Route::post('/planes', [PlanEstudioController::class, 'store'])->name('planes.store');
+Route::get('/planes/{id}/edit', [PlanEstudioController::class, 'edit'])->name('planes.edit');
+Route::put('/planes/{id}', [PlanEstudioController::class, 'update'])->name('planes.update');
+Route::delete('/planes/{id}', [PlanEstudioController::class, 'destroy'])->name('planes.destroy');
+Route::resource('planes', PlanEstudioController::class);
 #Route::get('/login', function () {
  #   return view('auth.login');
 #})->name('login');

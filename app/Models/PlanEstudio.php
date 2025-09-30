@@ -1,0 +1,26 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class PlanEstudio extends Model
+{
+    use HasFactory;
+
+    protected $table = 'planes_estudio';
+    protected $primaryKey = 'id_plan_estudio';
+    public $timestamps = false;
+
+    protected $fillable = [
+        'nombre',
+        'id_carrera',
+        'datos',
+    ];
+
+    public function carrera()
+{
+    return $this->belongsTo(Carrera::class, 'id_carrera');
+}
+}
