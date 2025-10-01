@@ -15,8 +15,8 @@ return new class extends Migration
             $table->foreign(['id_tipo_competencia'], 'materias_ibfk_1')->references(['id_tipo_competencia'])->on('tipos_competencia')->onUpdate('restrict')->onDelete('restrict');
             $table->foreign(['id_modalidad'], 'materias_ibfk_2')->references(['id_modalidad'])->on('modalidades')->onUpdate('restrict')->onDelete('restrict');
             $table->foreign(['id_espacio_formativo'], 'materias_ibfk_3')->references(['id_espacio_formativo'])->on('espacios_formativos')->onUpdate('restrict')->onDelete('restrict');
-            $table->foreign(['id_periodo_escolar'], 'materias_ibfk_4')->references(['id_periodo_escolar'])->on('periodos_escolares')->onUpdate('restrict')->onDelete('restrict');
-            $table->foreign(['id_plan_estudio'], 'materias_ibfk_5')->references(['id_plan_estudio'])->on('planes_estudio')->onUpdate('restrict')->onDelete('restrict');
+            $table->foreign(['id_plan_estudio'], 'materias_ibfk_4')->references(['id_plan_estudio'])->on('planes_estudio')->onUpdate('restrict')->onDelete('restrict');
+            $table->foreign(['id_numero_periodo'], 'materias_ibfk_5')->references(['id_numero_periodo'])->on('numero_periodos')->onUpdate('restrict')->onDelete('restrict');
         });
     }
 

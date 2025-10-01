@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('historial_status', function (Blueprint $table) {
-            $table->foreign(['id_tipo_status'], 'historial_status_ibfk_1')->references(['id_tipo_status'])->on('tipos_status')->onUpdate('restrict')->onDelete('restrict');
+        Schema::table('numero_periodos', function (Blueprint $table) {
+            $table->foreign(['id_tipo_periodo'], 'numero_periodos_ibfk_1')->references(['id_tipo_periodo'])->on('tipos_periodos')->onUpdate('restrict')->onDelete('restrict');
         });
     }
 
@@ -21,8 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('historial_status', function (Blueprint $table) {
-            $table->dropForeign('historial_status_ibfk_1');
+        Schema::table('numero_periodos', function (Blueprint $table) {
+            $table->dropForeign('numero_periodos_ibfk_1');
         });
     }
 };

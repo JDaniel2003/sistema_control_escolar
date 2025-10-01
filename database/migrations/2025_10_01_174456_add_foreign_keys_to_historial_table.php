@@ -16,6 +16,8 @@ return new class extends Migration
             $table->foreign(['id_grupo'], 'historial_ibfk_2')->references(['id_grupo'])->on('grupos')->onUpdate('restrict')->onDelete('restrict');
             $table->foreign(['id_periodo_escolar'], 'historial_ibfk_3')->references(['id_periodo_escolar'])->on('periodos_escolares')->onUpdate('restrict')->onDelete('restrict');
             $table->foreign(['id_historial_status'], 'historial_ibfk_4')->references(['id_historial_status'])->on('historial_status')->onUpdate('restrict')->onDelete('restrict');
+            $table->foreign(['id_status_inicio'], 'historial_ibfk_5')->references(['id_status_academico'])->on('status_academico')->onUpdate('restrict')->onDelete('restrict');
+            $table->foreign(['id_status_terminacion'], 'historial_ibfk_6')->references(['id_status_academico'])->on('status_academico')->onUpdate('restrict')->onDelete('restrict');
         });
     }
 
@@ -29,6 +31,8 @@ return new class extends Migration
             $table->dropForeign('historial_ibfk_2');
             $table->dropForeign('historial_ibfk_3');
             $table->dropForeign('historial_ibfk_4');
+            $table->dropForeign('historial_ibfk_5');
+            $table->dropForeign('historial_ibfk_6');
         });
     }
 };

@@ -19,8 +19,8 @@ return new class extends Migration
             $table->integer('creditos')->nullable();
             $table->integer('horas')->nullable();
             $table->integer('id_espacio_formativo')->nullable()->index('id_espacio_formativo');
-            $table->integer('id_periodo_escolar')->nullable()->index('id_periodo_escolar');
             $table->integer('id_plan_estudio')->nullable()->index('id_plan_estudio');
+            $table->integer('id_numero_periodo')->nullable()->index('id_numero_periodo');
             $table->json('datos')->nullable();
         });
     }

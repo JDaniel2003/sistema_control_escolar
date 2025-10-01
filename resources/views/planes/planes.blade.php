@@ -260,16 +260,14 @@
      tabindex="-1" role="dialog"
      aria-labelledby="verModalLabel{{ $plan->id_plan_estudio }}"
      aria-hidden="true">
-    <div class="modal-dialog modal-xl" role="document"> {{-- modal más ancho --}}
+    <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
 
             <div class="modal-header">
-                <h5 class="text-center w-100"
-                    id="verModalLabel{{ $plan->id_plan_estudio }}">
+                <h5 class="text-center w-100">
                     Detalles del Plan de Estudio
                 </h5>
-                <button type="button" class="close"
-                        data-dismiss="modal" aria-label="Cerrar">
+                <button type="button" class="close" data-dismiss="modal">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -283,21 +281,41 @@
                 <h5 class="text-center mb-3">Mapa Curricular</h5>
 
                 @if ($plan->materias && $plan->materias->count() > 0)
-                    <div class="container-fluid">
-                        <div class="row">
-                            @foreach ($plan->materias as $materia)
-                                <div class="col-md-3 mb-3"> {{-- 4 materias por fila --}}
-                                    <div class="border rounded p-2 h-100 text-center"
-                                         style="background-color:#fff3e0;">
-                                        <strong>{{ $materia->nombre }}</strong><br>
-                                        <small><strong>ID:</strong> {{ $materia->id_materia }}</small><br>
-                                        <small><strong>Créditos:</strong> {{ $materia->creditos ?? 'N/A' }}</small><br>
-                                        <small><strong>Horas:</strong> {{ $materia->horas ?? 'N/A' }}</small><br>
-                                        <small><strong>Modalidad:</strong> {{ $materia->id_modalidad ?? 'N/A' }}</small>
-                                    </div>
-                                </div>
-                            @endforeach
-                        </div>
+                    @php
+                        // Agrupar materias por periodo
+                        $materiasPorPeriodo = $plan->materias->groupBy('id_numero_periodo');
+                        $maxMaterias = $materiasPorPeriodo->map->count()->max(); // Saber cuál columna es más larga
+                    @endphp
+
+                    <div class="table-responsive">
+                        <table class="table table-bordered text-center align-middle">
+                            <thead class="bg-primary text-white">
+                                <tr>
+                                    @foreach ($materiasPorPeriodo as $idPeriodo => $materias)
+                                        <th>
+                                            {{ $materias->first()->numeroPeriodo->numero ?? 'Periodo' }}
+                                        </th>
+                                    @endforeach
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for ($i = 0; $i < $maxMaterias; $i++)
+                                    <tr>
+                                        @foreach ($materiasPorPeriodo as $materias)
+                                            <td>
+                                                @if (isset($materias[$i]))
+                                                    <div class="border rounded p-2" style="min-width:180px; background-color:#fff3e0;">
+                                                        <strong>{{ $materias[$i]->nombre }}</strong><br>
+                                                        <small><strong>Horas:</strong> {{ $materias[$i]->horas ?? 'N/A' }}</small><br>
+                                                        <small><strong>Créditos:</strong> {{ $materias[$i]->creditos ?? 'N/A' }}</small>
+                                                    </div>
+                                                @endif
+                                            </td>
+                                        @endforeach
+                                    </tr>
+                                @endfor
+                            </tbody>
+                        </table>
                     </div>
                 @else
                     <p class="text-muted">No hay materias registradas para este plan.</p>
@@ -312,6 +330,9 @@
         </div>
     </div>
 </div>
+
+
+
 
 
                                                         <!-- Botón Editar -->

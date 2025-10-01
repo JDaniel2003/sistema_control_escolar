@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('status_academico', function (Blueprint $table) {
-            $table->integer('id_status_academico', true);
-            $table->integer('id_tipo_status_academico')->nullable()->index('id_tipo_status_academico');
-            $table->string('descripcion', 100)->nullable();
+        Schema::create('historial_status', function (Blueprint $table) {
+            $table->integer('id_historial_status', true);
+            $table->string('nombre', 100);
+            $table->boolean('incorporacion')->nullable();
             $table->json('datos')->nullable();
         });
     }
@@ -24,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('status_academico');
+        Schema::dropIfExists('historial_status');
     }
 };

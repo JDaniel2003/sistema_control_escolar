@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::table('unidades', function (Blueprint $table) {
             $table->foreign(['id_materia'], 'unidades_ibfk_1')->references(['id_materia'])->on('materias')->onUpdate('restrict')->onDelete('restrict');
-            $table->foreign(['id_numero_unidad'], 'unidades_ibfk_2')->references(['id_numero_unidad'])->on('numero_unidades')->onUpdate('restrict')->onDelete('restrict');
         });
     }
 
@@ -24,7 +23,6 @@ return new class extends Migration
     {
         Schema::table('unidades', function (Blueprint $table) {
             $table->dropForeign('unidades_ibfk_1');
-            $table->dropForeign('unidades_ibfk_2');
         });
     }
 };

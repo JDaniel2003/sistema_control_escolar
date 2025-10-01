@@ -17,7 +17,7 @@ return new class extends Migration
             $table->integer('id_tipo_periodo')->nullable()->index('id_tipo_periodo');
             $table->date('fecha_inicio')->nullable();
             $table->date('fecha_fin')->nullable();
-            $table->enum('estado', ['Abierto', 'Cerrado']);
+            $table->enum('estado', ['Cerrado', 'Abierto'])->nullable();
             $table->json('datos')->nullable();
         });
     }

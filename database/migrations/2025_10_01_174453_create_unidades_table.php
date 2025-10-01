@@ -14,11 +14,11 @@ return new class extends Migration
         Schema::create('unidades', function (Blueprint $table) {
             $table->integer('id_unidad', true);
             $table->string('nombre', 100);
+            $table->integer('numero_unidad')->nullable();
             $table->integer('horas_saber')->nullable();
             $table->integer('horas_saber_hacer')->nullable();
             $table->integer('horas_totales')->nullable();
             $table->integer('id_materia')->nullable()->index('id_materia');
-            $table->integer('id_numero_unidad')->nullable()->index('id_numero_unidad');
             $table->json('datos')->nullable();
         });
     }

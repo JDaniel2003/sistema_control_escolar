@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Materia;
 use App\Models\PlanEstudio;
+use App\Models\NumeroPeriodo;
 use Illuminate\Http\Request;
 
 class MateriaController extends Controller
@@ -11,7 +12,7 @@ class MateriaController extends Controller
     // Mostrar todas las materias
     public function index()
     {
-        $materias = Materia::with('planEstudio')->paginate(10);
+        $materias = Materia::with(['planEstudio', 'numeroPeriodo'])->paginate(10);
         return view('materias.index', compact('materias'));
     }
 
@@ -19,7 +20,9 @@ class MateriaController extends Controller
     public function materiasPorPlan($id_plan_estudio)
     {
         $plan = PlanEstudio::findOrFail($id_plan_estudio);
-        $materias = Materia::where('id_plan_estudio', $id_plan_estudio)->get();
+        $materias = Materia::with('numeroPeriodo')
+            ->where('id_plan_estudio', $id_plan_estudio)
+            ->get();
 
         return view('materias.materias_por_plan', compact('plan', 'materias'));
     }
@@ -28,14 +31,17 @@ class MateriaController extends Controller
     public function create()
     {
         $planes = PlanEstudio::all();
-        return view('materias.create', compact('planes'));
+        $periodos = NumeroPeriodo::all();
+        return view('materias.create', compact('planes', 'periodos'));
     }
 
+    // Guardar nueva materia
     public function store(Request $request)
     {
         $request->validate([
             'nombre' => 'required|string|max:150',
             'id_plan_estudio' => 'required|integer|exists:planes_estudio,id_plan_estudio',
+            'id_numero_periodo' => 'required|integer|exists:numero_periodos,id_numero_periodo',
         ]);
 
         Materia::create($request->all());
@@ -48,9 +54,11 @@ class MateriaController extends Controller
     {
         $materia = Materia::findOrFail($id);
         $planes = PlanEstudio::all();
-        return view('materias.edit', compact('materia', 'planes'));
+        $periodos = NumeroPeriodo::all();
+        return view('materias.edit', compact('materia', 'planes', 'periodos'));
     }
 
+    // Actualizar materia
     public function update(Request $request, $id)
     {
         $materia = Materia::findOrFail($id);
@@ -58,6 +66,7 @@ class MateriaController extends Controller
         $request->validate([
             'nombre' => 'required|string|max:150',
             'id_plan_estudio' => 'required|integer|exists:planes_estudio,id_plan_estudio',
+            'id_numero_periodo' => 'required|integer|exists:numero_periodos,id_numero_periodo',
         ]);
 
         $materia->update($request->all());

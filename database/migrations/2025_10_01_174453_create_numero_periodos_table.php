@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('numero_unidades', function (Blueprint $table) {
-            $table->integer('id_numero_unidad', true);
-            $table->string('nombre', 50);
-            $table->json('datos')->nullable();
+        Schema::create('numero_periodos', function (Blueprint $table) {
+            $table->integer('id_numero_periodo', true);
+            $table->integer('numero');
+            $table->integer('id_tipo_periodo')->index('id_tipo_periodo');
         });
     }
 
@@ -23,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('numero_unidades');
+        Schema::dropIfExists('numero_periodos');
     }
 };

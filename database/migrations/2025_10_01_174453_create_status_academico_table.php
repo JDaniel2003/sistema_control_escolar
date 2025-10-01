@@ -11,9 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tipos_status_academico', function (Blueprint $table) {
-            $table->integer('id_tipo_status_academico', true);
-            $table->string('nombre', 50);
+        Schema::create('status_academico', function (Blueprint $table) {
+            $table->integer('id_status_academico', true);
+            $table->string('nombre', 100);
+            $table->string('descripcion', 100)->nullable();
             $table->json('datos')->nullable();
         });
     }
@@ -23,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tipos_status_academico');
+        Schema::dropIfExists('status_academico');
     }
 };
