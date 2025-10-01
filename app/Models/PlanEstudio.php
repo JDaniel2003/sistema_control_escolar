@@ -23,4 +23,8 @@ class PlanEstudio extends Model
 {
     return $this->belongsTo(Carrera::class, 'id_carrera');
 }
+public function materias()
+    {
+        return $this->hasMany(Materia::class, 'id_plan_estudio', 'id_plan_estudio');
+    }
 }

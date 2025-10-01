@@ -254,44 +254,66 @@
                                                         </button>
 
                                                         <!-- Modal Ver -->
-                                                        <div class="modal fade"
-                                                            id="verModal{{ $plan->id_plan_estudio }}" tabindex="-1"
-                                                            role="dialog"
-                                                            aria-labelledby="verModalLabel{{ $plan->id_plan_estudio }}"
-                                                            aria-hidden="true">
-                                                            <div class="modal-dialog modal-lg" role="document">
-                                                                <div class="modal-content">
+                                                        <!-- Modal Ver -->
+<div class="modal fade"
+     id="verModal{{ $plan->id_plan_estudio }}"
+     tabindex="-1" role="dialog"
+     aria-labelledby="verModalLabel{{ $plan->id_plan_estudio }}"
+     aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document"> {{-- modal más ancho --}}
+        <div class="modal-content">
 
-                                                                    <div class="modal-header">
-                                                                        <h5 class="text-center"
-                                                                            id="verModalLabel{{ $plan->id_plan_estudio }}"
-                                                                            style="padding-left: 280px;">
-                                                                            Detalles del Plan de Estudio
-                                                                        </h5>
-                                                                        <button type="button" class="close"
-                                                                            data-dismiss="modal" aria-label="Cerrar">
-                                                                            <span aria-hidden="true">&times;</span>
-                                                                        </button>
-                                                                    </div>
+            <div class="modal-header">
+                <h5 class="text-center w-100"
+                    id="verModalLabel{{ $plan->id_plan_estudio }}">
+                    Detalles del Plan de Estudio
+                </h5>
+                <button type="button" class="close"
+                        data-dismiss="modal" aria-label="Cerrar">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
 
-                                                                    <div class="modal-body">
-                                                                        <p><strong>ID:</strong>
-                                                                            {{ $plan->id_plan_estudio }}</p>
-                                                                        <p><strong>Nombre:</strong> {{ $plan->nombre }}
-                                                                        </p>
-                                                                        <p><strong>Carrera:</strong>
-                                                                            {{ $plan->carrera->nombre ?? 'N/A' }}</p>
-                                                                    </div>
+            <div class="modal-body">
+                <p><strong>ID:</strong> {{ $plan->id_plan_estudio }}</p>
+                <p><strong>Nombre:</strong> {{ $plan->nombre }}</p>
+                <p><strong>Carrera:</strong> {{ $plan->carrera->nombre ?? 'N/A' }}</p>
 
-                                                                    <div class="modal-footer">
-                                                                        <button type="button"
-                                                                            class="btn btn-secondary"
-                                                                            data-dismiss="modal">Cerrar</button>
-                                                                    </div>
+                <hr>
+                <h5 class="text-center mb-3">Mapa Curricular</h5>
 
-                                                                </div>
-                                                            </div>
-                                                        </div>
+                @if ($plan->materias && $plan->materias->count() > 0)
+                    <div class="container-fluid">
+                        <div class="row">
+                            @foreach ($plan->materias as $materia)
+                                <div class="col-md-3 mb-3"> {{-- 4 materias por fila --}}
+                                    <div class="border rounded p-2 h-100 text-center"
+                                         style="background-color:#fff3e0;">
+                                        <strong>{{ $materia->nombre }}</strong><br>
+                                        <small><strong>ID:</strong> {{ $materia->id_materia }}</small><br>
+                                        <small><strong>Créditos:</strong> {{ $materia->creditos ?? 'N/A' }}</small><br>
+                                        <small><strong>Horas:</strong> {{ $materia->horas ?? 'N/A' }}</small><br>
+                                        <small><strong>Modalidad:</strong> {{ $materia->id_modalidad ?? 'N/A' }}</small>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                @else
+                    <p class="text-muted">No hay materias registradas para este plan.</p>
+                @endif
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary"
+                        data-dismiss="modal">Cerrar</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
                                                         <!-- Botón Editar -->
                                                         <button type="button" class="btn btn-warning btn-sm"
                                                             data-toggle="modal"

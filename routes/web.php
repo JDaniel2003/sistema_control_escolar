@@ -4,6 +4,8 @@ use App\Http\Controllers\Auth\LoginController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CarreraController;
 use App\Http\Controllers\PlanEstudioController;
+use App\Http\Controllers\MateriaController;
+
 
 #----------------------login-----------------------
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
@@ -53,6 +55,13 @@ Route::get('/planes/{id}/edit', [PlanEstudioController::class, 'edit'])->name('p
 Route::put('/planes/{id}', [PlanEstudioController::class, 'update'])->name('planes.update');
 Route::delete('/planes/{id}', [PlanEstudioController::class, 'destroy'])->name('planes.destroy');
 Route::resource('planes', PlanEstudioController::class);
+
+
+
+
+Route::resource('materias', MateriaController::class);
+Route::get('planes/{id_plan_estudio}/materias', [MateriaController::class, 'materiasPorPlan'])->name('planes.materias');
+
 #Route::get('/login', function () {
  #   return view('auth.login');
 #})->name('login');
