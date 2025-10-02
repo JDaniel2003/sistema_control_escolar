@@ -9,10 +9,11 @@ class Materia extends Model
 {
     protected $table = 'materias';
     protected $primaryKey = 'id_materia';
-    public $timestamps = false; // tu tabla no tiene created_at ni updated_at
+    public $timestamps = false;
 
     protected $fillable = [
         'nombre',
+        'clave',
         'id_tipo_competencia',
         'id_modalidad',
         'creditos',
@@ -27,14 +28,30 @@ class Materia extends Model
         'datos' => 'array'
     ];
 
-    
     // Relación: una materia pertenece a un plan de estudio
-    public function plan()
+    public function planEstudio()
     {
         return $this->belongsTo(PlanEstudio::class, 'id_plan_estudio', 'id_plan_estudio');
     }
-     public function numeroPeriodo()
+
+    // Relación: una materia pertenece a un número de periodo
+    public function numeroPeriodo()
     {
         return $this->belongsTo(NumeroPeriodo::class, 'id_numero_periodo', 'id_numero_periodo');
     }
+
+    public function competencia()
+    {
+        return $this->belongsTo(Competencia::class, 'id_tipo_competencia', 'id_tipo_competencia');
+    }
+    public function modalidad()
+    {
+        return $this->belongsTo(Modalidad::class, 'id_modalidad', 'id_modalidad');
+    }
+    public function espacioFormativo()
+    {
+        return $this->belongsTo(EspacioFormativo::class, 'id_espacio_formativo', 'id_espacio_formativo');
+    }
+
+    
 }

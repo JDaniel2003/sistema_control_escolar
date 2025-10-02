@@ -57,7 +57,12 @@ Route::delete('/planes/{id}', [PlanEstudioController::class, 'destroy'])->name('
 Route::resource('planes', PlanEstudioController::class);
 
 
-
+Route::get('/materias', [MateriaController::class, 'index'])->name('materias');
+Route::get('/materias/create', [MateriaController::class, 'create'])->name('materias.create');
+Route::post('/materias', [MateriaController::class, 'store'])->name('materias.store');
+Route::get('/materias/{id}/edit', [MateriaController::class, 'edit'])->name('materias.edit');
+Route::put('/materias/{id}', [MateriaController::class, 'update'])->name('materias.update');
+Route::delete('/materias/{id}', [MateriaController::class, 'destroy'])->name('materias.destroy');
 
 Route::resource('materias', MateriaController::class);
 Route::get('planes/{id_plan_estudio}/materias', [MateriaController::class, 'materiasPorPlan'])->name('planes.materias');

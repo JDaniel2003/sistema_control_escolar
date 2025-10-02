@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Competencia;
+use App\Models\EspacioFormativo;
 use App\Models\Materia;
+use App\Models\Modalidad;
 use App\Models\PlanEstudio;
 use App\Models\NumeroPeriodo;
 use Illuminate\Http\Request;
@@ -10,11 +13,43 @@ use Illuminate\Http\Request;
 class MateriaController extends Controller
 {
     // Mostrar todas las materias
-    public function index()
+    public function index(Request $request)
     {
-        $materias = Materia::with(['planEstudio', 'numeroPeriodo'])->paginate(10);
-        return view('materias.index', compact('materias'));
+        $query = Materia::with('planEstudio');
+        $query = Materia::with('numeroPeriodo');
+        $query = Materia::with('competencia');
+        $query = Materia::with('modalidad');
+        $query = Materia::with('espacioFormativo');
+
+        if ($request->filled('nombre')) {
+            $query->where('nombre', 'like', '%' . $request->nombre . '%');
+        }
+
+
+        $mostrar = $request->get('mostrar', 10); // por defecto 10
+
+        if ($mostrar === "todo") {
+            $materias = $query->orderBy('id_materia', 'desc')->get();
+        } else {
+            $materias = $query->orderBy('id_materia', 'desc')->paginate((int)$mostrar);
+        }
+
+
+        $materias = Materia::with(['planEstudio', 'numeroPeriodo', 'competencia', 'espacioFormativo'])
+            ->orderBy('id_numero_periodo')
+            ->get();
+
+        $planes = PlanEstudio::all();
+        $periodos = NumeroPeriodo::with('tipoPeriodo')->get();
+        $competencias = Competencia::all();
+        $modalidades = Modalidad::all();
+        $espaciosformativos = EspacioFormativo::all();
+
+
+
+        return view('materias.materias', compact('materias', 'planes', 'periodos', 'competencias', 'modalidades', 'espaciosformativos'));
     }
+
 
     // Mostrar materias por plan de estudio
     public function materiasPorPlan($id_plan_estudio)
@@ -30,21 +65,31 @@ class MateriaController extends Controller
     // Crear nueva materia
     public function create()
     {
+        $competencias = Competencia::all();
+        $modalidades = Modalidad::all();
+        $espaciosformativos = EspacioFormativo::all();
         $planes = PlanEstudio::all();
         $periodos = NumeroPeriodo::all();
-        return view('materias.create', compact('planes', 'periodos'));
+        return view('materias.create', compact('competencias', 'modalidades', 'espaciosformativos', 'planes', 'periodos'));
     }
 
     // Guardar nueva materia
     public function store(Request $request)
     {
         $request->validate([
+            'clave',
             'nombre' => 'required|string|max:150',
+            'id_tipo_competencia' => 'required|integer|exists:tipos_competencia,id_tipo_competencia',
+            'id_modalidad' => 'required|integer|exists:modalidades,id_modalidad',
+            'creditos',
+            'horas',
+            'id_espacio_formativo' => 'required|integer|exists:espacios_formativos,id_espacio_formativo',
             'id_plan_estudio' => 'required|integer|exists:planes_estudio,id_plan_estudio',
             'id_numero_periodo' => 'required|integer|exists:numero_periodos,id_numero_periodo',
         ]);
 
         Materia::create($request->all());
+
 
         return redirect()->route('materias.index')->with('success', 'Materia creada correctamente.');
     }
