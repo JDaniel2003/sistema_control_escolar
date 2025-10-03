@@ -2,15 +2,28 @@
 
 namespace App\Http\Controllers;
 
+
+
 use App\Models\PlanEstudio;
 use App\Models\Carrera;
 use Illuminate\Http\Request;
-
+use Barryvdh\DomPDF\Facade\Pdf;
 class PlanEstudioController extends Controller
 {
+    public function descargarPDF($id)
+    {
+        $plan = PlanEstudio::with(['carrera', 'materias.numeroPeriodo.tipoPeriodo'])
+            ->findOrFail($id);
+
+        $pdf = Pdf::loadView('planes.pdf', compact('plan'))
+            ->setPaper('a4', 'landscape');
+
+        return $pdf->download('Plan_' . $plan->nombre . '.pdf');
+    }
     public function index(Request $request)
     {
-        $query = PlanEstudio::with('carrera');
+        // Traer carrera + contar materias
+        $query = PlanEstudio::with('carrera')->withCount('materias');
 
         // Filtro por nombre de plan
         if ($request->filled('nombre')) {
@@ -22,8 +35,17 @@ class PlanEstudioController extends Controller
             $query->where('id_carrera', $request->id_carrera);
         }
 
-        // Obtener resultados con filtros
-        $planes = $query->get();
+        // Orden descendente
+        $query->orderByDesc('id_plan_estudio');
+
+        // Mostrar todo o paginar
+        $mostrar = $request->get('mostrar', 10); // por defecto 10
+        if ($mostrar === "todo") {
+            $planes = $query->get();
+        } else {
+            $planes = $query->paginate((int)$mostrar)->appends($request->all());
+        }
+
         $carreras = Carrera::all();
 
         return view('planes.planes', compact('planes', 'carreras'));

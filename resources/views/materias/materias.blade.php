@@ -80,7 +80,7 @@
                     <a class="nav-link navbar-active-item px-3 mr-1" href="#">Materias</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-white px-3 mr-1" href="#">Planes de estudio</a>
+                    <a class="nav-link text-white px-3 mr-1" href="{{ route('planes.index') }}">Planes de estudio</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link text-white px-3 mr-1" href="#">Alumnos</a>
@@ -143,45 +143,103 @@
                             </div>
 
 
-                            <!-- Filtros -->
-                            <div class="container mb-4 d-flex justify-content-center">
-                                <div class="p-3 border rounded bg-light d-inline-block shadow-sm">
+                            <!-- Filtros - Cada campo se ajusta a su contenido -->
+                            <div class="container-fluid mb-4 d-flex justify-content-center px-3">
+                                <div class="p-3 border rounded bg-light shadow-sm w-100" style="max-width: 1800px;">
                                     <form id="filtrosForm" method="GET" action="{{ route('materias.index') }}"
-                                        class="d-inline-flex flex-wrap gap-2 align-items-center">
+                                        class="d-flex flex-nowrap gap-2 align-items-center flex-shrink-0 overflow-auto">
+
+                                        <!-- Clave -->
+                                        <input type="text" name="clave"
+                                            class="form-control form-control-sm py-1 px-2"
+                                            placeholder="Buscar por Clave" value="{{ request('clave') }}"
+                                            size="{{ max(strlen(request('clave')), strlen('Buscar por Clave')) }}"
+                                            style="font-size: 1rem;">
 
                                         <!-- Nombre -->
                                         <input type="text" name="nombre"
-                                            class="form-control form-control-sm w-auto"
-                                            placeholder="Buscar por nombre" value="{{ request('nombre') }}">
+                                            class="form-control form-control-sm py-1 px-2"
+                                            placeholder="Buscar por Nombre" value="{{ request('nombre') }}"
+                                            size="{{ max(strlen(request('nombre')), strlen('Buscar por Nombre')) }}"
+                                            style="font-size: 1rem;">
 
-                                        <!-- Duración -->
-                                        <input type="text" name="duracion"
-                                            class="form-control form-control-sm w-auto"
-                                            placeholder="Buscar por duración" value="{{ request('duracion') }}">
+                                        <!-- Competencia -->
+                                        <select name="id_tipo_competencia"
+                                            class="form-control form-control-sm py-1 px-2"
+                                            style="font-size: 1rem; width: fit-content;">
+                                            <option value="">Competencia</option>
+                                            @foreach ($competencias as $competencia)
+                                                <option value="{{ $competencia->id_tipo_competencia }}"
+                                                    {{ request('id_tipo_competencia') == $competencia->id_tipo_competencia ? 'selected' : '' }}
+                                                    style="white-space: nowrap;">
+                                                    {{ $competencia->nombre }}
+                                                </option>
+                                            @endforeach
+                                        </select>
 
-                                        <!-- Mostrar -->
-                                        <select name="mostrar" onchange="this.form.submit()"
-                                            class="form-control form-control-sm w-auto">
-                                            <option value="10" {{ request('mostrar') == 10 ? 'selected' : '' }}>10
-                                            </option>
-                                            <option value="13" {{ request('mostrar') == 13 ? 'selected' : '' }}>13
-                                            </option>
-                                            <option value="25" {{ request('mostrar') == 25 ? 'selected' : '' }}>25
-                                            </option>
-                                            <option value="50" {{ request('mostrar') == 50 ? 'selected' : '' }}>50
-                                            </option>
-                                            <option value="todo"
-                                                {{ request('mostrar') == 'todo' ? 'selected' : '' }}>Todo</option>
+                                        <!-- Modalidad -->
+                                        <select name="id_modalidad" class="form-control form-control-sm py-1 px-2"
+                                            style="font-size: 1rem; width: fit-content;">
+                                            <option value="">Modalidad</option>
+                                            @foreach ($modalidades as $modalidad)
+                                                <option value="{{ $modalidad->id_modalidad }}"
+                                                    {{ request('id_modalidad') == $modalidad->id_modalidad ? 'selected' : '' }}
+                                                    style="white-space: nowrap;">
+                                                    {{ $modalidad->nombre }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+
+
+                                        <!-- Espacio Formativo -->
+                                        <select name="id_espacio_formativo"
+                                            class="form-control form-control-sm py-1 px-2"
+                                            style="font-size: 1rem; width: fit-content;">
+                                            <option value="">Espacio Formativo</option>
+                                            @foreach ($espaciosformativos as $espacioformativo)
+                                                <option value="{{ $espacioformativo->id_espacio_formativo }}"
+                                                    {{ request('id_espacio_formativo') == $espacioformativo->id_espacio_formativo ? 'selected' : '' }}
+                                                    style="white-space: nowrap;">
+                                                    {{ $espacioformativo->nombre }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+
+                                        <!-- Plan Estudio -->
+                                        <select name="id_plan_estudio" class="form-control form-control-sm py-1 px-2"
+                                            style="font-size: 1rem; width: fit-content;">
+                                            <option value="">Plan de Estudio</option>
+                                            @foreach ($planes as $plan)
+                                                <option value="{{ $plan->id_plan_estudio }}"
+                                                    {{ request('id_plan_estudio') == $plan->id_plan_estudio ? 'selected' : '' }}
+                                                    style="white-space: nowrap;">
+                                                    {{ $plan->nombre }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+
+                                        <select name="id_numero_periodo"
+                                            class="form-control form-control-sm py-1 px-2"
+                                            style="font-size: 1rem; width: fit-content;">
+                                            <option value="">Número Período</option>
+                                            @foreach ($periodos as $periodo)
+                                                <option value="{{ $periodo->id_numero_periodo }}">
+                                                    {{ $periodo->tipoPeriodo->nombre }} - {{ $periodo->numero }}
+                                                </option>
+                                            @endforeach
                                         </select>
 
                                         <!-- Botón Mostrar todo -->
                                         <a href="{{ route('materias.index', ['mostrar' => 'todo']) }}"
-                                            class="btn btn-sm btn-outline-secondary d-flex align-items-center">
+                                            class="btn btn-sm btn-outline-secondary py-1 px-3 d-flex align-items-center"
+                                            style="font-size: 1rem; white-space: nowrap;">
                                             <i class="fas fa-list me-1"></i> Mostrar todo
                                         </a>
                                     </form>
                                 </div>
                             </div>
+
+
 
 
                             <script>
@@ -206,6 +264,15 @@
                                             }, 500);
                                         });
                                     }
+                                    let claveInput = form.querySelector("input[name='clave']");
+                                    if (claveInput) {
+                                        claveInput.addEventListener("keyup", function() {
+                                            clearTimeout(typingTimer);
+                                            typingTimer = setTimeout(() => {
+                                                form.submit();
+                                            }, 500);
+                                        });
+                                    }
                                 });
                             </script>
 
@@ -216,7 +283,7 @@
 
                             <!-- Tabla -->
 
-                            <div class="card-body">
+                            <div class="card-body1">
                                 @if (session('success'))
                                     <div class="alert alert-success">{{ session('success') }}</div>
                                 @endif

@@ -19,8 +19,14 @@ class CarreraController extends Controller
     }
 
     $carreras = $query->get();
+    $carreras = Carrera::with('planesEstudio')->get();
+    $carreras = Carrera::with([
+    'planVigente.materias.numeroPeriodo.tipoPeriodo'
+])->get();
 
-    return view('carreras.carreras', compact('carreras'));
+return view('carreras.carreras', compact('carreras'));
+
+
 }
     public function create()
     {

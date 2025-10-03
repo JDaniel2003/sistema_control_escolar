@@ -15,18 +15,40 @@ class MateriaController extends Controller
     // Mostrar todas las materias
     public function index(Request $request)
     {
-        $query = Materia::with('planEstudio');
-        $query = Materia::with('numeroPeriodo');
-        $query = Materia::with('competencia');
-        $query = Materia::with('modalidad');
-        $query = Materia::with('espacioFormativo');
+        $query = Materia::with([
+        'planEstudio',
+        'numeroPeriodo.tipoPeriodo',
+        'competencia',
+        'modalidad',
+        'espacioFormativo'
+    ]);
 
         if ($request->filled('nombre')) {
-            $query->where('nombre', 'like', '%' . $request->nombre . '%');
-        }
+        $query->where('nombre', 'like', '%' . $request->nombre . '%');
+    }
+    if ($request->filled('clave')) {
+        $query->where('clave', 'like', '%' . $request->clave . '%');
+    }
+     if ($request->filled('id_tipo_competencia')) {
+        $query->where('id_tipo_competencia', $request->id_tipo_competencia);
+    }
+    if ($request->filled('id_modalidad')) {
+        $query->where('id_modalidad', $request->id_modalidad);
+    }
+    if ($request->filled('id_espacio_formativo')) {
+        $query->where('id_espacio_formativo', $request->id_espacio_formativo);
+    }
 
+    if ($request->filled('id_plan_estudio')) {
+        $query->where('id_plan_estudio', $request->id_plan_estudio);
+    }
 
-        $mostrar = $request->get('mostrar', 10); // por defecto 10
+    if ($request->filled('id_numero_periodo')) {
+        $query->where('id_numero_periodo', $request->id_numero_periodo);
+    }
+
+    // PAGINACIÓN
+     $mostrar = $request->get('mostrar', 10); // por defecto 10
 
         if ($mostrar === "todo") {
             $materias = $query->orderBy('id_materia', 'desc')->get();
@@ -34,10 +56,6 @@ class MateriaController extends Controller
             $materias = $query->orderBy('id_materia', 'desc')->paginate((int)$mostrar);
         }
 
-
-        $materias = Materia::with(['planEstudio', 'numeroPeriodo', 'competencia', 'espacioFormativo'])
-            ->orderBy('id_numero_periodo')
-            ->get();
 
         $planes = PlanEstudio::all();
         $periodos = NumeroPeriodo::with('tipoPeriodo')->get();

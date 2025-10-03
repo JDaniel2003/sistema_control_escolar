@@ -77,10 +77,10 @@
                     <a class="nav-link navbar-active-item px-3 mr-1" href="#">Carreras</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-white px-3 mr-1" href="#">Materias</a>
+                    <a class="nav-link text-white px-3 mr-1" href="{{ route('materias.index') }}">Materias</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-white px-3 mr-1" href="#">Planes de estudio</a>
+                    <a class="nav-link text-white px-3 mr-1" href="{{ route('planes.index') }}">Planes de estudio</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link text-white px-3 mr-1" href="#">Alumnos</a>
@@ -238,6 +238,135 @@
                                                     <td>{{ $carrera->nombre }}</td>
                                                     <td>{{ $carrera->duracion }}</td>
                                                     <td>
+                                                        <button type="button" class="btn btn-info btn-sm"
+                                                            data-toggle="modal"
+                                                            data-target="#verModal{{ $carrera->id_carrera }}">
+                                                            <i class="fas fa-eye"></i> Ver Plan de Estudios
+                                                        </button>
+
+                                                        <!-- Modal Ver Plan Vigente -->
+                                                        <div class="modal fade"
+                                                            id="verModal{{ $carrera->id_carrera }}" tabindex="-1"
+                                                            role="dialog"
+                                                            aria-labelledby="verModalLabel{{ $carrera->id_carrera }}"
+                                                            aria-hidden="true">
+
+                                                            <div class="modal-dialog modal-xl" role="document">
+                                                                <div class="modal-content">
+
+                                                                    {{-- Header --}}
+                                                                    <div class="modal-header bg-primary text-white">
+                                                                        <h5 class="text-center w-100"
+                                                                            id="verModalLabel{{ $carrera->id_carrera }}">
+                                                                            Plan de Estudios de la carrera de {{ $carrera->nombre }}
+                                                                        </h5>
+                                                                        <button type="button"
+                                                                            class="close text-white"
+                                                                            data-dismiss="modal" aria-label="Cerrar">
+                                                                            <span aria-hidden="true">&times;</span>
+                                                                        </button>
+                                                                    </div>
+
+                                                                    {{-- Body --}}
+                                                                    <div class="modal-body">
+                                                                        @php
+                                                                            $planVigente = $carrera->planesEstudio
+                                                                                ->where('vigencia', 'Vigente')
+                                                                                ->first();
+                                                                        @endphp
+                                                                        <h5 class="text-center mb-3">MAPA
+                                                                            CURRICULAR</h5>
+
+
+                                                                        @if ($planVigente)
+                                                                            <p><strong>CARRERA:</strong>
+                                                                                {{ $carrera->nombre }}</p>
+                                                                            <p><strong>PLAN:</strong>
+                                                                                {{ $planVigente->nombre }}</p>
+                                                                            <p><strong>VIGENCIA:</strong>
+                                                                                <span
+                                                                                    class="badge bg-success">{{ $planVigente->vigencia }}</span>
+                                                                            </p>
+                                                                            <a href="{{ route('planes.descargarPDF', $planVigente->id_plan_estudio) }}"
+                                                                                target="_blank"
+                                                                                class="btn btn-danger mb-3">
+                                                                                <i class="fas fa-file-pdf"></i>
+                                                                                Descargar Plan de estudios
+                                                                            </a>
+
+
+                                                                            <hr>
+
+                                                                            @if ($planVigente->materias && $planVigente->materias->count() > 0)
+                                                                                @php
+                                                                                    // Agrupar materias por periodo
+                                                                                    $materiasPorPeriodo = $planVigente->materias->groupBy(
+                                                                                        'id_numero_periodo',
+                                                                                    );
+                                                                                    $maxMaterias = $materiasPorPeriodo->map
+                                                                                        ->count()
+                                                                                        ->max();
+                                                                                @endphp
+
+                                                                                <div class="table-responsive">
+                                                                                    <table
+                                                                                        class="table table-bordered text-center align-middle">
+                                                                                        <thead
+                                                                                            class="bg-info text-white">
+                                                                                            <tr>
+                                                                                                @foreach ($materiasPorPeriodo as $idPeriodo => $materias)
+                                                                                                    <th>
+                                                                                                        {{ $materias->first()->numeroPeriodo->tipoPeriodo->nombre ?? 'Periodo' }}
+                                                                                                        {{ $materias->first()->numeroPeriodo->numero ?? '' }}
+                                                                                                    </th>
+                                                                                                @endforeach
+                                                                                            </tr>
+                                                                                        </thead>
+                                                                                        <tbody>
+                                                                                            @for ($i = 0; $i < $maxMaterias; $i++)
+                                                                                                <tr>
+                                                                                                    @foreach ($materiasPorPeriodo as $materias)
+                                                                                                        <td>
+                                                                                                            @if (isset($materias[$i]))
+                                                                                                                <div class="border rounded p-2"
+                                                                                                                    style="min-width:180px; background-color:#fff3e0;">
+                                                                                                                    <strong>{{ $materias[$i]->nombre }}</strong><br>
+                                                                                                                    <small><strong>Horas:</strong>
+                                                                                                                        {{ $materias[$i]->horas ?? 'N/A' }}</small><br>
+                                                                                                                    <small><strong>Créditos:</strong>
+                                                                                                                        {{ $materias[$i]->creditos ?? 'N/A' }}</small>
+                                                                                                                </div>
+                                                                                                            @endif
+                                                                                                        </td>
+                                                                                                    @endforeach
+                                                                                                </tr>
+                                                                                            @endfor
+                                                                                        </tbody>
+                                                                                    </table>
+                                                                                </div>
+                                                                            @else
+                                                                                <p class="text-muted">No hay materias
+                                                                                    registradas para este plan.</p>
+                                                                            @endif
+                                                                        @else
+                                                                            <p class="text-muted">⚠️ Esta carrera no
+                                                                                tiene un plan vigente registrado.</p>
+                                                                        @endif
+                                                                    </div>
+
+                                                                    {{-- Footer --}}
+                                                                    <div class="modal-footer">
+                                                                        <button type="button"
+                                                                            class="btn btn-secondary"
+                                                                            data-dismiss="modal">Cerrar</button>
+                                                                    </div>
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+
+
                                                         <button type="button" class="btn btn-warning btn-sm"
                                                             data-toggle="modal"
                                                             data-target="#editarModal{{ $carrera->id_carrera }}">

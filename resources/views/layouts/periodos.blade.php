@@ -76,10 +76,10 @@
                     <a class="nav-link text-white px-3 mr-1" href="{{ route('carreras.index') }}">Carreras</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-white px-3 mr-1" href="#">Materias</a>
+                    <a class="nav-link text-white px-3 mr-1" href="{{ route('materias.index') }}">Materias</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-white px-3 mr-1" href="#">Planes de estudio</a>
+                    <a class="nav-link text-white px-3 mr-1" href="{{ route('planes.index') }}">Planes de estudio</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link text-white px-3 mr-1" href="#">Alumnos</a>

@@ -235,6 +235,8 @@
                                                 <th>ID</th>
                                                 <th>Nombre</th>
                                                 <th>Carrera</th>
+                                                <th>Total de Materias</th>
+                                                <th>Vigencia</th>
                                                 <th>Acciones</th>
                                             </tr>
                                         </thead>
@@ -244,6 +246,10 @@
                                                     <td>{{ $plan->id_plan_estudio }}</td>
                                                     <td>{{ $plan->nombre }}</td>
                                                     <td>{{ $plan->carrera->nombre ?? 'N/A' }}</td>
+                                                    <td>
+                                                        {{ $plan->materias_count ?? 0 }}
+                                                    </td>
+                                                    <td>{{ $plan->vigencia }}</td>
                                                     <td>
 
                                                         <!-- Botón Ver -->
@@ -255,81 +261,99 @@
 
                                                         <!-- Modal Ver -->
                                                         <!-- Modal Ver -->
-<div class="modal fade"
-     id="verModal{{ $plan->id_plan_estudio }}"
-     tabindex="-1" role="dialog"
-     aria-labelledby="verModalLabel{{ $plan->id_plan_estudio }}"
-     aria-hidden="true">
-    <div class="modal-dialog modal-xl" role="document">
-        <div class="modal-content">
+                                                        <div class="modal fade"
+                                                            id="verModal{{ $plan->id_plan_estudio }}" tabindex="-1"
+                                                            role="dialog"
+                                                            aria-labelledby="verModalLabel{{ $plan->id_plan_estudio }}"
+                                                            aria-hidden="true">
+                                                            <div class="modal-dialog modal-xl" role="document">
+                                                                <div class="modal-content">
 
-            <div class="modal-header">
-                <h5 class="text-center w-100">
-                    Detalles del Plan de Estudio
-                </h5>
-                <button type="button" class="close" data-dismiss="modal">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
+                                                                    <div class="modal-header">
+                                                                        <h5 class="text-center w-100">
+                                                                            Detalles del Plan de Estudio
+                                                                        </h5>
+                                                                        <button type="button" class="close"
+                                                                            data-dismiss="modal">
+                                                                            <span aria-hidden="true">&times;</span>
+                                                                        </button>
+                                                                    </div>
 
-            <div class="modal-body">
-                <p><strong>ID:</strong> {{ $plan->id_plan_estudio }}</p>
-                <p><strong>Nombre:</strong> {{ $plan->nombre }}</p>
-                <p><strong>Carrera:</strong> {{ $plan->carrera->nombre ?? 'N/A' }}</p>
+                                                                    <div class="modal-body">
+                                                                        <p><strong>ID:</strong>
+                                                                            {{ $plan->id_plan_estudio }}</p>
+                                                                        <p><strong>Nombre:</strong> {{ $plan->nombre }}
+                                                                        </p>
+                                                                        <p><strong>Carrera:</strong>
+                                                                            {{ $plan->carrera->nombre ?? 'N/A' }}</p>
 
-                <hr>
-                <h5 class="text-center mb-3">Mapa Curricular</h5>
+                                                                        <hr>
+                                                                        <h5 class="text-center mb-3">Mapa Curricular
+                                                                        </h5>
 
-                @if ($plan->materias && $plan->materias->count() > 0)
-                    @php
-                        // Agrupar materias por periodo
-                        $materiasPorPeriodo = $plan->materias->groupBy('id_numero_periodo');
-                        $maxMaterias = $materiasPorPeriodo->map->count()->max(); // Saber cuál columna es más larga
-                    @endphp
+                                                                        @if ($plan->materias && $plan->materias->count() > 0)
+                                                                            @php
+                                                                                // Agrupar materias por periodo
+                                                                                $materiasPorPeriodo = $plan->materias->groupBy(
+                                                                                    'id_numero_periodo',
+                                                                                );
+                                                                                $maxMaterias = $materiasPorPeriodo->map
+                                                                                    ->count()
+                                                                                    ->max(); // Saber cuál columna es más larga
+                                                                            @endphp
 
-                    <div class="table-responsive">
-                        <table class="table table-bordered text-center align-middle">
-                            <thead class="bg-primary text-white">
-                                <tr>
-                                    @foreach ($materiasPorPeriodo as $idPeriodo => $materias)
-                                        <th>
-                                            {{ $materias->first()->numeroPeriodo->numero ?? 'Periodo' }}
-                                        </th>
-                                    @endforeach
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @for ($i = 0; $i < $maxMaterias; $i++)
-                                    <tr>
-                                        @foreach ($materiasPorPeriodo as $materias)
-                                            <td>
-                                                @if (isset($materias[$i]))
-                                                    <div class="border rounded p-2" style="min-width:180px; background-color:#fff3e0;">
-                                                        <strong>{{ $materias[$i]->nombre }}</strong><br>
-                                                        <small><strong>Horas:</strong> {{ $materias[$i]->horas ?? 'N/A' }}</small><br>
-                                                        <small><strong>Créditos:</strong> {{ $materias[$i]->creditos ?? 'N/A' }}</small>
-                                                    </div>
-                                                @endif
-                                            </td>
-                                        @endforeach
-                                    </tr>
-                                @endfor
-                            </tbody>
-                        </table>
-                    </div>
-                @else
-                    <p class="text-muted">No hay materias registradas para este plan.</p>
-                @endif
-            </div>
+                                                                            <div class="table-responsive">
+                                                                                <table
+                                                                                    class="table table-bordered text-center align-middle">
+                                                                                    <thead
+                                                                                        class="bg-primary text-white">
+                                                                                        <tr>
+                                                                                            @foreach ($materiasPorPeriodo as $idPeriodo => $materias)
+                                                                                                <th>
+                                                                                                    {{ $materias->first()->numeroPeriodo->tipoPeriodo->nombre ?? 'N/A' }}
+                                                                                                    {{ $materias->first()->numeroPeriodo->numero ?? 'N/A' }}
+                                                                                                </th>
+                                                                                            @endforeach
+                                                                                        </tr>
+                                                                                    </thead>
 
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary"
-                        data-dismiss="modal">Cerrar</button>
-            </div>
+                                                                                    <tbody>
+                                                                                        @for ($i = 0; $i < $maxMaterias; $i++)
+                                                                                            <tr>
+                                                                                                @foreach ($materiasPorPeriodo as $materias)
+                                                                                                    <td>
+                                                                                                        @if (isset($materias[$i]))
+                                                                                                            <div class="border rounded p-2"
+                                                                                                                style="min-width:180px; background-color:#fff3e0;">
+                                                                                                                <strong>{{ $materias[$i]->nombre }}</strong><br>
+                                                                                                                <small><strong>Horas:</strong>
+                                                                                                                    {{ $materias[$i]->horas ?? 'N/A' }}</small><br>
+                                                                                                                <small><strong>Créditos:</strong>
+                                                                                                                    {{ $materias[$i]->creditos ?? 'N/A' }}</small>
+                                                                                                            </div>
+                                                                                                        @endif
+                                                                                                    </td>
+                                                                                                @endforeach
+                                                                                            </tr>
+                                                                                        @endfor
+                                                                                    </tbody>
+                                                                                </table>
+                                                                            </div>
+                                                                        @else
+                                                                            <p class="text-muted">No hay materias
+                                                                                registradas para este plan.</p>
+                                                                        @endif
+                                                                    </div>
 
-        </div>
-    </div>
-</div>
+                                                                    <div class="modal-footer">
+                                                                        <button type="button"
+                                                                            class="btn btn-secondary"
+                                                                            data-dismiss="modal">Cerrar</button>
+                                                                    </div>
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
 
 
 

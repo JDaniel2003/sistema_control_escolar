@@ -67,6 +67,10 @@ Route::delete('/materias/{id}', [MateriaController::class, 'destroy'])->name('ma
 Route::resource('materias', MateriaController::class);
 Route::get('planes/{id_plan_estudio}/materias', [MateriaController::class, 'materiasPorPlan'])->name('planes.materias');
 
+
+Route::get('/planes/{id}/descargar-pdf', [PlanEstudioController::class, 'descargarPDF'])
+    ->name('planes.descargarPDF');
+
 #Route::get('/login', function () {
  #   return view('auth.login');
 #})->name('login');

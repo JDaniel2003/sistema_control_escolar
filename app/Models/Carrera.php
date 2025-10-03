@@ -15,4 +15,17 @@ class Carrera extends Model
         'duracion',
         'datos'
     ];
+
+     public function planesEstudio()
+    {
+        return $this->hasMany(PlanEstudio::class, 'id_carrera', 'id_carrera');
+    }
+
+    public function planVigente()
+{
+    return $this->hasOne(PlanEstudio::class, 'id_carrera')
+                ->where('vigencia', 'vigente');
+}
+
+
 }
