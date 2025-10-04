@@ -53,5 +53,14 @@ class Materia extends Model
         return $this->belongsTo(EspacioFormativo::class, 'id_espacio_formativo', 'id_espacio_formativo');
     }
 
+
+
+
+    public function unidades()
+{
+    return $this->hasMany(Unidad::class, 'id_materia');
+}
+
+
     
 }

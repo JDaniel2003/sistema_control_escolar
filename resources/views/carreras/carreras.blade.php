@@ -287,12 +287,12 @@
                                                                                 <span
                                                                                     class="badge bg-success">{{ $planVigente->vigencia }}</span>
                                                                             </p>
-                                                                            <a href="{{ route('planes.descargarPDF', $planVigente->id_plan_estudio) }}"
+                                                                        {{--    <a href="{{ route('planes.descargarPDF', $planVigente->id_plan_estudio) }}"
                                                                                 target="_blank"
                                                                                 class="btn btn-danger mb-3">
                                                                                 <i class="fas fa-file-pdf"></i>
                                                                                 Descargar Plan de estudios
-                                                                            </a>
+                                                                            </a>  --}}
 
 
                                                                             <hr>

@@ -8,10 +8,66 @@ use App\Models\Materia;
 use App\Models\Modalidad;
 use App\Models\PlanEstudio;
 use App\Models\NumeroPeriodo;
+use App\Models\Unidad;
 use Illuminate\Http\Request;
 
 class MateriaController extends Controller
 {
+
+
+    public function agregarUnidad(Request $request, $idMateria)
+{
+    $request->validate([
+        'nombre' => 'required|string|max:100',
+        'numero_unidad' => 'required|integer',
+        'horas_saber' => 'nullable|integer',
+        'horas_saber_hacer' => 'nullable|integer',
+        'horas_totales' => 'nullable|integer',
+    ]);
+
+    Unidad::create([
+        'nombre' => $request->nombre,
+        'numero_unidad' => $request->numero_unidad,
+        'horas_saber' => $request->horas_saber,
+        'horas_saber_hacer' => $request->horas_saber_hacer,
+        'horas_totales' => ($request->horas_saber ?? 0) + ($request->horas_saber_hacer ?? 0),
+        'id_materia' => $idMateria,
+    ]);
+
+
+    return back()->with('success', 'Unidad agregada correctamente');
+}
+
+public function actualizarUnidad(Request $request, $idUnidad)
+{
+    $request->validate([
+        'nombre' => 'required|string|max:100',
+        'numero_unidad' => 'required|integer',
+        'horas_saber' => 'nullable|integer',
+        'horas_saber_hacer' => 'nullable|integer',
+    ]);
+
+    $unidad = Unidad::findOrFail($idUnidad);
+
+    $unidad->update([
+        'nombre' => $request->nombre,
+        'numero_unidad' => $request->numero_unidad,
+        'horas_saber' => $request->horas_saber,
+        'horas_saber_hacer' => $request->horas_saber_hacer,
+        'horas_totales' => ($request->horas_saber ?? 0) + ($request->horas_saber_hacer ?? 0),
+    ]);
+
+    return back()->with('success', 'Unidad actualizada correctamente');
+}
+
+
+public function eliminarUnidad($idUnidad)
+{
+    $unidad = Unidad::findOrFail($idUnidad);
+    $unidad->delete();
+
+    return back()->with('success', 'Unidad eliminada correctamente');
+}
     // Mostrar todas las materias
     public function index(Request $request)
     {
@@ -21,7 +77,7 @@ class MateriaController extends Controller
         'competencia',
         'modalidad',
         'espacioFormativo'
-    ]);
+    ])->withCount('unidades');
 
         if ($request->filled('nombre')) {
         $query->where('nombre', 'like', '%' . $request->nombre . '%');
@@ -127,7 +183,13 @@ class MateriaController extends Controller
         $materia = Materia::findOrFail($id);
 
         $request->validate([
+           'clave',
             'nombre' => 'required|string|max:150',
+            'id_tipo_competencia' => 'required|integer|exists:tipos_competencia,id_tipo_competencia',
+            'id_modalidad' => 'required|integer|exists:modalidades,id_modalidad',
+            'creditos',
+            'horas',
+            'id_espacio_formativo' => 'required|integer|exists:espacios_formativos,id_espacio_formativo',
             'id_plan_estudio' => 'required|integer|exists:planes_estudio,id_plan_estudio',
             'id_numero_periodo' => 'required|integer|exists:numero_periodos,id_numero_periodo',
         ]);

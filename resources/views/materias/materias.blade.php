@@ -302,6 +302,7 @@
                                                 <th>Espacio Formativo</th>
                                                 <th>Plan de Estudios</th>
                                                 <th>Numero Período</th>
+                                                <th>Unidades</th>
                                                 <th>Acciones</th>
                                             </tr>
                                         </thead>
@@ -320,6 +321,203 @@
                                                     <td>
                                                         {{ $materia->numeroPeriodo->tipoPeriodo->nombre ?? 'N/A' }}
                                                         {{ $materia->numeroPeriodo->numero ?? 'N/A' }}
+                                                    </td>
+                                                    <td>{{ $materia->unidades_count }}
+                                                        <button class="btn btn-info btn-sm" data-toggle="modal"
+                                                            data-target="#unidadesModal{{ $materia->id_materia }}">
+                                                            Ver unidades
+                                                        </button>
+                                                        <!-- Modal -->
+                                                        <div class="modal fade"
+                                                            id="unidadesModal{{ $materia->id_materia }}"
+                                                            tabindex="-1" role="dialog">
+                                                            <div class="modal-dialog modal-lg">
+                                                                <div class="modal-content">
+
+                                                                    <div class="modal-header">
+                                                                        <h5 class="modal-title">Unidades de
+                                                                            {{ $materia->nombre }}</h5>
+                                                                        <button type="button" class="close"
+                                                                            data-dismiss="modal">&times;</button>
+                                                                    </div>
+
+                                                                    <div class="modal-body">
+                                                                        <!-- Form único para actualizar todas las unidades -->
+                                                                        <form
+                                                                            action="{{ route('unidades.actualizarTodo', $materia->id_materia) }}"
+                                                                            method="POST">
+                                                                            @csrf
+                                                                            @method('PUT')
+
+                                                                            <table
+                                                                                class="table table-sm table-bordered">
+                                                                                <thead>
+                                                                                    <tr>
+                                                                                        <th>Unidad</th>
+                                                                                        <th>Nombre</th>
+                                                                                        <th>Horas saber</th>
+                                                                                        <th>Horas saber hacer</th>
+                                                                                        <th>Horas totales</th>
+                                                                                        <th>Eliminar</th>
+                                                                                    </tr>
+                                                                                </thead>
+                                                                                <tbody>
+                                                                                    @forelse($materia->unidades as $i => $unidad)
+                                                                                        <tr>
+                                                                                            <td>
+                                                                                                <input type="hidden"
+                                                                                                    name="unidades[{{ $i }}][id_unidad]"
+                                                                                                    value="{{ $unidad->id_unidad }}">
+                                                                                                <input type="number"
+                                                                                                    name="unidades[{{ $i }}][numero_unidad]"
+                                                                                                    class="form-control form-control-sm"
+                                                                                                    value="{{ $unidad->numero_unidad }}"
+                                                                                                    required>
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                <input type="text"
+                                                                                                    name="unidades[{{ $i }}][nombre]"
+                                                                                                    class="form-control form-control-sm"
+                                                                                                    value="{{ $unidad->nombre }}"
+                                                                                                    required>
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                <input type="number"
+                                                                                                    name="unidades[{{ $i }}][horas_saber]"
+                                                                                                    class="form-control form-control-sm horas-saber"
+                                                                                                    value="{{ $unidad->horas_saber }}">
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                <input type="number"
+                                                                                                    name="unidades[{{ $i }}][horas_saber_hacer]"
+                                                                                                    class="form-control form-control-sm horas-saber-hacer"
+                                                                                                    value="{{ $unidad->horas_saber_hacer }}">
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                <input type="number"
+                                                                                                    name="unidades[{{ $i }}][horas_totales]"
+                                                                                                    class="form-control form-control-sm horas-totales"
+                                                                                                    value="{{ $unidad->horas_totales }}"
+                                                                                                    readonly>
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                <!-- Botón de tipo "button" que dispara el formulario de eliminación externo -->
+                                                                                                <button type="button"
+                                                                                                    class="btn btn-danger btn-sm"
+                                                                                                    onclick="eliminarUnidad('formEliminar{{ $unidad->id_unidad }}');">
+                                                                                                    Eliminar
+                                                                                                </button>
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                    @empty
+                                                                                        <tr>
+                                                                                            <td colspan="6"
+                                                                                                class="text-center">No
+                                                                                                hay unidades</td>
+                                                                                        </tr>
+                                                                                    @endforelse
+                                                                                </tbody>
+                                                                            </table>
+
+                                                                            <div class="text-right mt-3">
+                                                                                <button type="submit"
+                                                                                    class="btn btn-primary">
+                                                                                    Aplicar cambios
+                                                                                </button>
+                                                                            </div>
+                                                                        </form>
+
+                                                                        <!-- Formulario para agregar nueva unidad -->
+                                                                        <form
+                                                                            action="{{ route('unidades.agregar', $materia->id_materia) }}"
+                                                                            method="POST" class="mt-4">
+                                                                            @csrf
+                                                                            <div class="form-row">
+                                                                                <div class="col">
+                                                                                    <input type="text"
+                                                                                        name="nombre"
+                                                                                        class="form-control form-control-sm"
+                                                                                        placeholder="Nombre unidad"
+                                                                                        required>
+                                                                                </div>
+                                                                                <div class="col">
+                                                                                    <input type="number"
+                                                                                        name="numero_unidad"
+                                                                                        class="form-control form-control-sm"
+                                                                                        placeholder="# Unidad"
+                                                                                        required>
+                                                                                </div>
+                                                                                <div class="col">
+                                                                                    <input type="number"
+                                                                                        name="horas_saber"
+                                                                                        class="form-control form-control-sm horas-saber"
+                                                                                        placeholder="Horas saber">
+                                                                                </div>
+                                                                                <div class="col">
+                                                                                    <input type="number"
+                                                                                        name="horas_saber_hacer"
+                                                                                        class="form-control form-control-sm horas-saber-hacer"
+                                                                                        placeholder="Horas saber hacer">
+                                                                                </div>
+                                                                                <div class="col">
+                                                                                    <input type="number"
+                                                                                        name="horas_totales"
+                                                                                        class="form-control form-control-sm horas-totales"
+                                                                                        placeholder="Total horas"
+                                                                                        readonly>
+                                                                                </div>
+                                                                                <div class="col-auto">
+                                                                                    <button type="submit"
+                                                                                        class="btn btn-success btn-sm">Agregar</button>
+                                                                                </div>
+                                                                            </div>
+                                                                        </form>
+                                                                    </div>
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <!-- Formularios de eliminación (FUERA del formulario principal) -->
+                                                        @foreach ($materia->unidades as $unidad)
+                                                            <form id="formEliminar{{ $unidad->id_unidad }}"
+                                                                action="{{ route('unidades.eliminar', $unidad->id_unidad) }}"
+                                                                method="POST" style="display: none;">
+                                                                @csrf
+                                                                @method('DELETE')
+                                                            </form>
+                                                        @endforeach
+
+                                                        <!-- JS para autocalcular horas totales y eliminar unidades -->
+                                                        <script>
+                                                            // Autocalcular horas totales
+                                                            document.addEventListener("input", function(e) {
+                                                                if (e.target.classList.contains("horas-saber") ||
+                                                                    e.target.classList.contains("horas-saber-hacer")) {
+
+                                                                    let row = e.target.closest("tr, .form-row");
+                                                                    if (!row) return;
+
+                                                                    let saber = parseInt(row.querySelector(".horas-saber")?.value) || 0;
+                                                                    let hacer = parseInt(row.querySelector(".horas-saber-hacer")?.value) || 0;
+
+                                                                    let totalInput = row.querySelector(".horas-totales");
+                                                                    if (totalInput) {
+                                                                        totalInput.value = saber + hacer;
+                                                                    }
+                                                                }
+                                                            });
+
+                                                            // Función segura para eliminar unidad
+                                                            function eliminarUnidad(formId) {
+                                                                if (confirm('¿Seguro que deseas eliminar esta unidad?')) {
+                                                                    document.getElementById(formId).submit();
+                                                                }
+                                                            }
+                                                        </script>
+
+
+
                                                     </td>
                                                     <td>
                                                         <!-- Botón Editar -->

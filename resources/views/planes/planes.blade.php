@@ -77,7 +77,7 @@
                     <a class="nav-link text-white px-3 mr-1" href="{{ route('carreras.index') }}">Carreras</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-white px-3 mr-1" href="#">Materias</a>
+                    <a class="nav-link text-white px-3 mr-1" href="{{ route('materias.index') }}">Materias</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link navbar-active-item px-3 mr-1" href="#">Planes de estudio</a>
@@ -420,6 +420,29 @@
                                                                                     @endforeach
                                                                                 </select>
                                                                             </div>
+
+                                                                            <div class="form-group">
+                                                                                <label style="text-align: left; display: block;">Vigencia</label>
+                                                                                <select name="vigencia"
+                                                                                    class="form-control @error('vigencia') is-invalid @enderror"
+                                                                                    required>
+                                                                                    <option value="">Selecciona
+                                                                                    </option>
+                                                                                    <option value="Vigente"
+                                                                                        {{ old('vigencia') == 'Vigente' ? 'selected' : '' }}>
+                                                                                        Vigente
+                                                                                    </option>
+                                                                                    <option value="No vigente"
+                                                                                        {{ old('No vigente') == 'No vigente' ? 'selected' : '' }}>
+                                                                                        No vigente
+                                                                                    </option>
+                                                                                </select>
+                                                                                @error('vigencia')
+                                                                                    <div class="invalid-feedback">
+                                                                                        {{ $message }}
+                                                                                    </div>
+                                                                                @enderror
+                                                                            </div>
                                                                         </div>
 
                                                                         <div class="modal-footer">
@@ -563,6 +586,23 @@
                             </select>
                             @error('id_carrera')
                                 <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="form-group">
+                            <label>Vigencia</label>
+                            <select name="vigencia" class="form-control @error('vigencia') is-invalid @enderror"
+                                required>
+                                <option value="">Selecciona</option>
+                                <option value="Vigente" {{ old('vigencia') == 'Vigente' ? 'selected' : '' }}>Vigente
+                                </option>
+                                <option value="No vigente" {{ old('No vigente') == 'No vigente' ? 'selected' : '' }}>
+                                    No vigente
+                                </option>
+                            </select>
+                            @error('vigencia')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
                             @enderror
                         </div>
 

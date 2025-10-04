@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CarreraController;
 use App\Http\Controllers\PlanEstudioController;
 use App\Http\Controllers\MateriaController;
-
+use App\Http\Controllers\UnidadController;
 
 #----------------------login-----------------------
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
@@ -71,6 +71,24 @@ Route::get('planes/{id_plan_estudio}/materias', [MateriaController::class, 'mate
 Route::get('/planes/{id}/descargar-pdf', [PlanEstudioController::class, 'descargarPDF'])
     ->name('planes.descargarPDF');
 
+
+
+
+    
+
+// Agregar unidad a una materia
+Route::post('/materias/{idMateria}/unidades', [MateriaController::class, 'agregarUnidad'])
+    ->name('unidades.agregar');
+    Route::put('/unidades/{idUnidad}/actualizar', [MateriaController::class, 'actualizarUnidad'])
+    ->name('unidades.actualizar');
+
+
+// Eliminar unidad
+Route::delete('/unidades/{idUnidad}', [MateriaController::class, 'eliminarUnidad'])
+    ->name('unidades.eliminar');
+
+    Route::put('/materias/{idMateria}/unidades/actualizar-todo', [UnidadController::class, 'actualizarTodo'])
+    ->name('unidades.actualizarTodo');
 #Route::get('/login', function () {
  #   return view('auth.login');
 #})->name('login');
