@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 class UnidadController extends Controller
 {
     /**
-     * Mostrar listado de unidades (puedes adaptarlo según materia).
+     * Mostrar listado de unidades.
      */
     public function index()
     {
@@ -42,8 +42,11 @@ class UnidadController extends Controller
 
         Unidad::create($request->all());
 
+        // 🔹 Actualizar totales de la materia
+        $this->actualizarHorasMateria($request->id_materia);
+
         return redirect()->route('materias.show', $request->id_materia)
-                         ->with('success', 'Unidad agregada correctamente');
+                         ->with('success', 'Unidad agregada correctamente y horas actualizadas.');
     }
 
     /**
@@ -56,26 +59,32 @@ class UnidadController extends Controller
         return view('unidades.edit', compact('unidad', 'materias'));
     }
 
+    /**
+     * Actualizar todas las unidades (por ejemplo desde una vista con varias).
+     */
     public function actualizarTodo(Request $request, $idMateria)
-{
-    foreach ($request->unidades as $unidadData) {
-        $unidad = Unidad::find($unidadData['id_unidad']);
-        if ($unidad) {
-            $unidad->update([
-                'numero_unidad'     => $unidadData['numero_unidad'],
-                'nombre'            => $unidadData['nombre'],
-                'horas_saber'       => $unidadData['horas_saber'],
-                'horas_saber_hacer' => $unidadData['horas_saber_hacer'],
-                'horas_totales'     => $unidadData['horas_totales'],
-            ]);
+    {
+        foreach ($request->unidades as $unidadData) {
+            $unidad = Unidad::find($unidadData['id_unidad']);
+            if ($unidad) {
+                $unidad->update([
+                    'numero_unidad'     => $unidadData['numero_unidad'],
+                    'nombre'            => $unidadData['nombre'],
+                    'horas_saber'       => $unidadData['horas_saber'],
+                    'horas_saber_hacer' => $unidadData['horas_saber_hacer'],
+                    'horas_totales'     => $unidadData['horas_totales'],
+                ]);
+            }
         }
+
+        // 🔹 Actualizar horas totales de la materia
+        $this->actualizarHorasMateria($idMateria);
+
+        return back()->with('success', 'Unidades y horas de la materia actualizadas correctamente.');
     }
 
-    return back()->with('success', 'Unidades actualizadas correctamente.');
-}
-
     /**
-     * Actualizar unidad en BD.
+     * Actualizar una unidad individual.
      */
     public function update(Request $request, $id)
     {
@@ -92,12 +101,15 @@ class UnidadController extends Controller
 
         $unidad->update($request->all());
 
+        // 🔹 Recalcular horas totales en la materia
+        $this->actualizarHorasMateria($unidad->id_materia);
+
         return redirect()->route('materias.show', $unidad->id_materia)
-                         ->with('success', 'Unidad actualizada correctamente');
+                         ->with('success', 'Unidad y horas de la materia actualizadas correctamente.');
     }
 
     /**
-     * Eliminar unidad.
+     * Eliminar unidad y actualizar horas de materia.
      */
     public function destroy($id)
     {
@@ -106,7 +118,26 @@ class UnidadController extends Controller
 
         $unidad->delete();
 
+        // 🔹 Recalcular horas totales en la materia
+        $this->actualizarHorasMateria($materiaId);
+
         return redirect()->route('materias.show', $materiaId)
-                         ->with('success', 'Unidad eliminada correctamente');
+                         ->with('success', 'Unidad eliminada y horas de la materia actualizadas correctamente.');
+    }
+
+    /**
+     * 🔹 Función privada para recalcular las horas totales de una materia
+     *    según la suma de todas sus unidades.
+     */
+    private function actualizarHorasMateria($idMateria)
+    {
+        $materia = Materia::find($idMateria);
+
+        if ($materia) {
+            $materia->horas_saber = Unidad::where('id_materia', $idMateria)->sum('horas_saber');
+            $materia->horas_saber_hacer = Unidad::where('id_materia', $idMateria)->sum('horas_saber_hacer');
+            $materia->horas = Unidad::where('id_materia', $idMateria)->sum('horas_totales');
+            $materia->save();
+        }
     }
 }

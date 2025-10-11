@@ -27,5 +27,8 @@ class Carrera extends Model
                 ->where('vigencia', 'vigente');
 }
 
-
+public function datosAcademicos()
+    {
+        return $this->belongsTo(DatosAcademicos::class, 'id_datos_academicos');
+    }
 }

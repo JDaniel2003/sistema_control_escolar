@@ -15,28 +15,45 @@ class MateriaController extends Controller
 {
 
 
-    public function agregarUnidad(Request $request, $idMateria)
+   public function agregarUnidad(Request $request, $idMateria)
 {
     $request->validate([
-        'nombre' => 'required|string|max:100',
+        'nombre' => 'required|string|max:255',
         'numero_unidad' => 'required|integer',
         'horas_saber' => 'nullable|integer',
         'horas_saber_hacer' => 'nullable|integer',
-        'horas_totales' => 'nullable|integer',
     ]);
+
+    $horas_totales = ($request->horas_saber ?? 0) + ($request->horas_saber_hacer ?? 0);
 
     Unidad::create([
         'nombre' => $request->nombre,
         'numero_unidad' => $request->numero_unidad,
         'horas_saber' => $request->horas_saber,
         'horas_saber_hacer' => $request->horas_saber_hacer,
-        'horas_totales' => ($request->horas_saber ?? 0) + ($request->horas_saber_hacer ?? 0),
+        'horas_totales' => $horas_totales,
         'id_materia' => $idMateria,
     ]);
 
+    // 🔹 Recalcular el total de horas de la materia
+    $this->actualizarHorasMateria($idMateria);
 
     return back()->with('success', 'Unidad agregada correctamente');
 }
+
+
+
+private function actualizarHorasMateria($idMateria)
+{
+    $materia = Materia::findOrFail($idMateria);
+
+    // Suma total de horas de todas las unidades
+    $totalHoras = $materia->unidades()->sum('horas_totales');
+
+    // Actualiza el campo 'horas' en la tabla materias
+    $materia->update(['horas' => $totalHoras]);
+}
+
 
 public function actualizarUnidad(Request $request, $idUnidad)
 {
@@ -59,15 +76,40 @@ public function actualizarUnidad(Request $request, $idUnidad)
 
     return back()->with('success', 'Unidad actualizada correctamente');
 }
+public function actualizarTodo(Request $request, $idMateria)
+{
+    foreach ($request->unidades as $unidadData) {
+        $unidad = Unidad::find($unidadData['id_unidad']);
+        if ($unidad) {
+            $horas_totales = ($unidadData['horas_saber'] ?? 0) + ($unidadData['horas_saber_hacer'] ?? 0);
+            $unidad->update([
+                'nombre' => $unidadData['nombre'],
+                'numero_unidad' => $unidadData['numero_unidad'],
+                'horas_saber' => $unidadData['horas_saber'],
+                'horas_saber_hacer' => $unidadData['horas_saber_hacer'],
+                'horas_totales' => $horas_totales,
+            ]);
+        }
+    }
 
+    // 🔹 Recalcula el total de horas
+    $this->actualizarHorasMateria($idMateria);
+
+    return back()->with('success', 'Unidades actualizadas correctamente');
+}
 
 public function eliminarUnidad($idUnidad)
 {
     $unidad = Unidad::findOrFail($idUnidad);
+    $idMateria = $unidad->id_materia;
     $unidad->delete();
+
+    // 🔹 Recalcula el total de horas
+    $this->actualizarHorasMateria($idMateria);
 
     return back()->with('success', 'Unidad eliminada correctamente');
 }
+
     // Mostrar todas las materias
     public function index(Request $request)
     {

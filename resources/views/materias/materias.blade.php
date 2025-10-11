@@ -528,16 +528,19 @@
                                                         </button>
 
                                                         <!-- Modal Editar -->
+                                                        <!-- Modal Editar Materia -->
                                                         <div class="modal fade"
                                                             id="editarModal{{ $materia->id_materia }}" tabindex="-1"
                                                             role="dialog"
                                                             aria-labelledby="editarModalLabel{{ $materia->id_materia }}"
                                                             aria-hidden="true">
-                                                            <div class="modal-dialog modal-lg" role="document">
+                                                            <div class="modal-dialog modal-lg modal-dialog-centered"
+                                                                role="document">
                                                                 <div class="modal-content">
 
+                                                                    <!-- Encabezado -->
                                                                     <div class="modal-header">
-                                                                        <h5 class="text-center w-100"
+                                                                        <h5 class="modal-title w-100 text-center font-weight-bold"
                                                                             id="editarModalLabel{{ $materia->id_materia }}">
                                                                             Editar Materia
                                                                         </h5>
@@ -547,6 +550,7 @@
                                                                         </button>
                                                                     </div>
 
+                                                                    <!-- Formulario -->
                                                                     <form
                                                                         action="{{ route('materias.update', $materia->id_materia) }}"
                                                                         method="POST">
@@ -554,127 +558,139 @@
                                                                         @method('PUT')
 
                                                                         <div class="modal-body">
-                                                                            <div class="form-group">
-                                                                                <label
-                                                                                    style="text-align: left; display: block;">Clave</label>
+                                                                            <div class="container-fluid">
 
-                                                                                <input type="text" name="clave"
-                                                                                    class="form-control"
-                                                                                    value="{{ old('clave', $materia->clave) }}"
-                                                                                    required>
-                                                                            </div>
-                                                                            <div class="form-group">
-                                                                                <label
-                                                                                    style="text-align: left; display: block;">Nombre</label>
+                                                                                <div class="form-row">
+                                                                                    <div class="form-group col-md-6">
+                                                                                        <label style="text-align: left; display: block;">Clave</label>
+                                                                                        <input type="text"
+                                                                                            name="clave"
+                                                                                            class="form-control"
+                                                                                            value="{{ old('clave', $materia->clave) }}"
+                                                                                            required>
+                                                                                    </div>
 
-                                                                                </option>
-                                                                                <input type="text" name="nombre"
-                                                                                    class="form-control"
-                                                                                    value="{{ old('nombre', $materia->nombre) }}"
-                                                                                    required>
-                                                                            </div>
-                                                                            <div class="form-group">
-                                                                                <label
-                                                                                    style="text-align: left; display: block;">Competencia</label>
-                                                                                <select name="id_tipo_competencia"
-                                                                                    class="form-control">
-                                                                                    <option value="">Tipo de
-                                                                                        Competencia</option>
-                                                                                    @foreach ($competencias as $competencia)
-                                                                                        <option
-                                                                                            value="{{ $competencia->id_tipo_competencia }}">
-                                                                                            {{ $competencia->nombre }}
+                                                                                    <div class="form-group col-md-6">
+                                                                                        <label style="text-align: left; display: block;">Nombre</label>
+                                                                                        <input type="text"
+                                                                                            name="nombre"
+                                                                                            class="form-control"
+                                                                                            value="{{ old('nombre', $materia->nombre) }}"
+                                                                                            required>
+                                                                                    </div>
+                                                                                </div>
+
+                                                                                <div class="form-row">
+                                                                                    <div class="form-group col-md-6">
+                                                                                        <label style="text-align: left; display: block;">Competencia</label>
+                                                                                        <select
+                                                                                            name="id_tipo_competencia"
+                                                                                            class="form-control">
+                                                                                            <option value="">Tipo
+                                                                                                de Competencia</option>
+                                                                                            @foreach ($competencias as $competencia)
+                                                                                                <option
+                                                                                                    value="{{ $competencia->id_tipo_competencia }}"
+                                                                                                    {{ $materia->id_tipo_competencia == $competencia->id_tipo_competencia ? 'selected' : '' }}>
+                                                                                                    {{ $competencia->nombre }}
+                                                                                                </option>
+                                                                                            @endforeach
+                                                                                        </select>
+                                                                                    </div>
+
+                                                                                    <div class="form-group col-md-6">
+                                                                                        <label style="text-align: left; display: block;">Modalidad</label>
+                                                                                        <select name="id_modalidad"
+                                                                                            class="form-control">
+                                                                                            <option value="">Tipo
+                                                                                                de Modalidad</option>
+                                                                                            @foreach ($modalidades as $modalidad)
+                                                                                                <option
+                                                                                                    value="{{ $modalidad->id_modalidad }}"
+                                                                                                    {{ $materia->id_modalidad == $modalidad->id_modalidad ? 'selected' : '' }}>
+                                                                                                    {{ $modalidad->nombre }}
+                                                                                                </option>
+                                                                                            @endforeach
+                                                                                        </select>
+                                                                                    </div>
+                                                                                </div>
+
+                                                                                <div class="form-row">
+                                                                                    <div class="form-group col-md-6">
+                                                                                        <label style="text-align: left; display: block;">Créditos</label>
+                                                                                        <input type="number"
+                                                                                            name="creditos"
+                                                                                            class="form-control"
+                                                                                            value="{{ old('creditos', $materia->creditos) }}">
+                                                                                    </div>
+
+                                                                                    <div class="form-group col-md-6">
+                                                                                        <label style="text-align: left; display: block;">Horas</label>
+                                                                                        <input type="number"
+                                                                                            name="horas"
+                                                                                            class="form-control"
+                                                                                            value="{{ old('horas', $materia->horas) }}">
+                                                                                    </div>
+                                                                                </div>
+
+                                                                                <div class="form-row">
+                                                                                    <div class="form-group col-md-6">
+                                                                                        <label style="text-align: left; display: block;">Espacio Formativo</label>
+                                                                                        <select
+                                                                                            name="id_espacio_formativo"
+                                                                                            class="form-control">
+                                                                                            <option value="">
+                                                                                                Espacio Formativo
+                                                                                            </option>
+                                                                                            @foreach ($espaciosformativos as $espacio)
+                                                                                                <option
+                                                                                                    value="{{ $espacio->id_espacio_formativo }}"
+                                                                                                    {{ $materia->id_espacio_formativo == $espacio->id_espacio_formativo ? 'selected' : '' }}>
+                                                                                                    {{ $espacio->nombre }}
+                                                                                                </option>
+                                                                                            @endforeach
+                                                                                        </select>
+                                                                                    </div>
+
+                                                                                    <div class="form-group col-md-6">
+                                                                                        <label style="text-align: left; display: block;">Plan de Estudio</label>
+                                                                                        <select name="id_plan_estudio"
+                                                                                            class="form-control">
+                                                                                            <option value="">Plan
+                                                                                                de Estudio</option>
+                                                                                            @foreach ($planes as $plan)
+                                                                                                <option
+                                                                                                    value="{{ $plan->id_plan_estudio }}"
+                                                                                                    {{ $materia->id_plan_estudio == $plan->id_plan_estudio ? 'selected' : '' }}>
+                                                                                                    {{ $plan->nombre }}
+                                                                                                </option>
+                                                                                            @endforeach
+                                                                                        </select>
+                                                                                    </div>
+                                                                                </div>
+
+                                                                                <div class="form-group">
+                                                                                    <label style="text-align: left; display: block;">Período</label>
+                                                                                    <select name="id_numero_periodo"
+                                                                                        class="form-control">
+                                                                                        <option value="">Período
                                                                                         </option>
-                                                                                    @endforeach
-                                                                                </select>
-                                                                            </div>
-                                                                            <div class="form-group">
-                                                                                <label
-                                                                                    style="text-align: left; display: block;">Modalidad</label>
-                                                                                <select name="id_modalidad"
-                                                                                    class="form-control">
-                                                                                    <option value="">Tipo de
-                                                                                        Modalidad</option>
-                                                                                    @foreach ($modalidades as $modalidad)
-                                                                                        <option
-                                                                                            value="{{ $modalidad->id_modalidad }}">
-                                                                                            {{ $modalidad->nombre }}
-                                                                                        </option>
-                                                                                    @endforeach
-                                                                                </select>
-                                                                            </div>
+                                                                                        @foreach ($periodos as $periodo)
+                                                                                            <option
+                                                                                                value="{{ $periodo->id_numero_periodo }}"
+                                                                                                {{ $materia->id_numero_periodo == $periodo->id_numero_periodo ? 'selected' : '' }}>
+                                                                                                {{ $periodo->tipoPeriodo->nombre }}
+                                                                                                -
+                                                                                                {{ $periodo->numero }}
+                                                                                            </option>
+                                                                                        @endforeach
+                                                                                    </select>
+                                                                                </div>
 
-                                                                            <div class="form-group">
-                                                                                <label
-                                                                                    style="text-align: left; display: block;">Créditos</label>
-
-                                                                                <input type="number" name="creditos"
-                                                                                    class="form-control"
-                                                                                    value="{{ old('creditos', $materia->creditos) }}">
-                                                                            </div>
-
-                                                                            <div class="form-group">
-                                                                                <label
-                                                                                    style="text-align: left; display: block;">Horas</label>
-                                                                                <input type="number" name="horas"
-                                                                                    class="form-control"
-                                                                                    value="{{ old('horas', $materia->horas) }}">
-                                                                            </div>
-                                                                            <div class="form-group">
-                                                                                <label
-                                                                                    style="text-align: left; display: block;">Espacio
-                                                                                    Formativo</label>
-                                                                                <select name="id_espacio_formativo"
-                                                                                    class="form-control">
-                                                                                    <option value="">Espacio
-                                                                                        Formativo
-                                                                                    </option>
-                                                                                    @foreach ($espaciosformativos as $espacio)
-                                                                                        <option
-                                                                                            value="{{ $espacio->id_espacio_formativo }}">
-                                                                                            {{ $espacio->nombre }}
-                                                                                        </option>
-                                                                                    @endforeach
-                                                                                </select>
-                                                                            </div>
-
-                                                                            <div class="form-group">
-                                                                                <label
-                                                                                    style="text-align: left; display: block;">Plan
-                                                                                    de Estudio</label>
-                                                                                <select name="id_plan_estudio"
-                                                                                    class="form-control">
-                                                                                    <option value="">Plan de
-                                                                                        Estudio</option>
-                                                                                    @foreach ($planes as $plan)
-                                                                                        <option
-                                                                                            value="{{ $plan->id_plan_estudio }}"
-                                                                                            {{ $materia->id_plan_estudio == $plan->id_plan_estudio ? 'selected' : '' }}>
-                                                                                            {{ $plan->nombre }}
-                                                                                        </option>
-                                                                                    @endforeach
-                                                                                </select>
-                                                                            </div>
-
-                                                                            <div class="form-group">
-                                                                                <label
-                                                                                    style="text-align: left; display: block;">Período</label>
-                                                                                <select name="id_numero_periodo"
-                                                                                    class="form-control">
-                                                                                    <option value="">Período
-                                                                                    </option>
-                                                                                    @foreach ($periodos as $periodo)
-                                                                                        <option
-                                                                                            value="{{ $periodo->id_numero_periodo }}"
-                                                                                            {{ $materia->id_numero_periodo == $periodo->id_numero_periodo ? 'selected' : '' }}>
-                                                                                            {{ $periodo->tipoPeriodo->nombre }}
-                                                                                            - {{ $periodo->numero }}
-                                                                                        </option>
-                                                                                    @endforeach
-                                                                                </select>
                                                                             </div>
                                                                         </div>
 
+                                                                        <!-- Footer -->
                                                                         <div class="modal-footer">
                                                                             <button type="button"
                                                                                 class="btn btn-secondary"
@@ -683,10 +699,10 @@
                                                                                 class="btn btn-success">Actualizar</button>
                                                                         </div>
                                                                     </form>
-
                                                                 </div>
                                                             </div>
                                                         </div>
+
 
                                                         <!-- Botón Eliminar -->
                                                         <button type="button" class="btn btn-danger btn-sm"
@@ -781,99 +797,115 @@
 
 
     <!-- Modal Nueva carrera -->
+    <!-- Modal Nueva Materia -->
     <div class="modal fade" id="nuevaMateriaModal" tabindex="-1" role="dialog"
         aria-labelledby="nuevaMateriaLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
             <div class="modal-content">
 
+                <!-- Encabezado -->
                 <div class="modal-header">
-                    <h5 class="text-center w-100" id="nuevaMateriaLabel">Nueva Materia</h5>
+                    <h5 class="modal-title w-100 text-center font-weight-bold" id="nuevaMateriaLabel">
+                        Nueva Materia
+                    </h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
 
+                <!-- Formulario -->
                 <form action="{{ route('materias.store') }}" method="POST">
                     @csrf
                     <div class="modal-body">
-                        <div class="form-group">
-                            <label>Clave</label>
+                        <div class="container-fluid">
 
-                            <input type="text" placeholder="Escribe Clave" name="clave" class="form-control"
-                                required>
-                        </div>
-                        <div class="form-group">
-                            <label>Nombre</label>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label>Clave</label>
+                                    <input type="text" name="clave" class="form-control"
+                                        placeholder="Escribe Clave" required>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Nombre</label>
+                                    <input type="text" name="nombre" class="form-control"
+                                        placeholder="Escribe Nombre" required>
+                                </div>
+                            </div>
 
-                            <input type="text" placeholder="Escribe Nombre" name="nombre" class="form-control"
-                                required>
-                        </div>
-                        <div class="form-group">
-                            <label>Competencia</label>
-                            <select name="id_tipo_competencia" class="form-control">
-                                <option value="">Tipo de
-                                    Competencia</option>
-                                @foreach ($competencias as $competencia)
-                                    <option value="{{ $competencia->id_tipo_competencia }}">
-                                        {{ $competencia->nombre }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Modalidad</label>
-                            <select name="id_modalidad" class="form-control">
-                                <option value="">Tipo de Modalidad</option>
-                                @foreach ($modalidades as $modalidad)
-                                    <option value="{{ $modalidad->id_modalidad }}">{{ $modalidad->nombre }}</option>
-                                @endforeach
-                            </select>
-                        </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label>Competencia</label>
+                                    <select name="id_tipo_competencia" class="form-control">
+                                        <option value="">Tipo de Competencia</option>
+                                        @foreach ($competencias as $competencia)
+                                            <option value="{{ $competencia->id_tipo_competencia }}">
+                                                {{ $competencia->nombre }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Modalidad</label>
+                                    <select name="id_modalidad" class="form-control">
+                                        <option value="">Tipo de Modalidad</option>
+                                        @foreach ($modalidades as $modalidad)
+                                            <option value="{{ $modalidad->id_modalidad }}">{{ $modalidad->nombre }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
 
-                        <div class="form-group">
-                            <label>Créditos</label>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label>Créditos</label>
+                                    <input type="number" name="creditos" class="form-control"
+                                        placeholder="Créditos">
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Horas</label>
+                                    <input type="number" name="horas" class="form-control" placeholder="Horas">
+                                </div>
+                            </div>
 
-                            <input type="number" placeholder="Créditos" name="creditos" class="form-control">
-                        </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label>Espacio Formativo</label>
+                                    <select name="id_espacio_formativo" class="form-control">
+                                        <option value="">Espacio Formativo</option>
+                                        @foreach ($espaciosformativos as $espacio)
+                                            <option value="{{ $espacio->id_espacio_formativo }}">
+                                                {{ $espacio->nombre }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Plan de Estudio</label>
+                                    <select name="id_plan_estudio" class="form-control">
+                                        <option value="">Plan de Estudio</option>
+                                        @foreach ($planes as $plan)
+                                            <option value="{{ $plan->id_plan_estudio }}">{{ $plan->nombre }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
 
-                        <div class="form-group">
-                            <label>Horas</label>
+                            <div class="form-group">
+                                <label>Período</label>
+                                <select name="id_numero_periodo" class="form-control">
+                                    <option value="">Período</option>
+                                    @foreach ($periodos as $periodo)
+                                        <option value="{{ $periodo->id_numero_periodo }}">
+                                            {{ $periodo->tipoPeriodo->nombre }} - {{ $periodo->numero }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
 
-                            <input type="number" placeholder="Horas" name="horas" class="form-control">
-                        </div>
-                        <div class="form-group">
-                            <label>Espacio Formativo</label>
-                            <select name="id_espacio_formativo" class="form-control">
-                                <option value="">Espacio Formativo</option>
-                                @foreach ($espaciosformativos as $espacio)
-                                    <option value="{{ $espacio->id_espacio_formativo }}">{{ $espacio->nombre }}
-                                    </option>
-                                @endforeach
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label>Plan de Estudio</label>
-                            <select name="id_plan_estudio" class="form-control">
-                                <option value="">Plan de Estudio</option>
-                                @foreach ($planes as $plan)
-                                    <option value="{{ $plan->id_plan_estudio }}">{{ $plan->nombre }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label>Período</label>
-                            <select name="id_numero_periodo" class="form-control">
-                                <option value="">Período</option>
-                                @foreach ($periodos as $periodo)
-                                    <option value="{{ $periodo->id_numero_periodo }}">
-                                        {{ $periodo->tipoPeriodo->nombre }} - {{ $periodo->numero }}
-                                    </option>
-                                @endforeach
-                            </select>
                         </div>
                     </div>
 
+                    <!-- Footer -->
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-success">Guardar</button>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
@@ -882,6 +914,7 @@
             </div>
         </div>
     </div>
+
 
 
 
